@@ -15,6 +15,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Code</th>
                 <th scope="col">Name</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -22,6 +23,10 @@
                 <th scope="row" th:text="${iterStat.count}">1</th>
                 <td th:text="${department.code}">HR001</td>
                 <td th:text="${department.name}">Human Resource</td>
+                <th>
+                    <a type="button" class="btn btn-primary">Update</a>
+                    <a th:href="@{/department/delete/{department.id}}" type="button" class="btn btn-danger">Delete</a>
+                </th>
             </tr>
             </tbody>
         </table>
