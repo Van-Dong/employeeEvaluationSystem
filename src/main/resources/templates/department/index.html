@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/base :: head('Department Manager')}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <header th:replace="~{layouts/base :: header}"></header>
+
+    <!--  Content  -->
+    <div class="my-4 px-3" style="min-height: 80vh">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Code</th>
+                <th scope="col">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="department,iterStat : ${departments}">
+                <th scope="row" th:text="${iterStat.count}">1</th>
+                <td th:text="${department.code}">HR001</td>
+                <td th:text="${department.name}">Human Resource</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer th:replace="~{layouts/base :: footer}"></footer>
+</body>
+</html>
