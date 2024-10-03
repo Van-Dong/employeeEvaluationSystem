@@ -9,6 +9,7 @@
 
     <!--  Content  -->
     <div class="my-4 px-3" style="min-height: 80vh">
+        <a th:href="@{/department/create}" type="button" class="btn btn-primary">Create New Department</a>
         <table class="table">
             <thead>
             <tr>
@@ -23,15 +24,31 @@
                 <th scope="row" th:text="${iterStat.count}">1</th>
                 <td th:text="${department.code}">HR001</td>
                 <td th:text="${department.name}">Human Resource</td>
-                <th>
-                    <a type="button" class="btn btn-primary">Update</a>
-                    <a th:href="@{/department/delete/{department.id}}" type="button" class="btn btn-danger">Delete</a>
-                </th>
+                <td>
+                    <a th:href="@{/department/edit/{id}(id=${department.id})}" type="button" class="btn btn-primary">Update</a>
+                    <button onClick="deleteDepartmentById([[${department.id}]])" type="button" class="btn btn-danger">Delete</button>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 
     <footer th:replace="~{layouts/base :: footer}"></footer>
+    <script>
+        function deleteDepartmentById(id) {
+            window.confirm("Are you sure want to delete this department") &&
+            fetch("/department/delete/" + id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+        });
+        }
+    </script>
 </body>
 </html>

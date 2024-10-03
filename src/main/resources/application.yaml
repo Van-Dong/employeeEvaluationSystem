@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/evaluation_system
     username: root
-    password: ""
+    password: dong_nv
   jpa:
     hibernate:
       ddl-auto: update

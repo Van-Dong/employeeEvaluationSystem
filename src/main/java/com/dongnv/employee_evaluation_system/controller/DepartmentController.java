@@ -49,6 +49,14 @@ public class DepartmentController {
         return "redirect:/department";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editDepartment(@PathVariable Long id, Model model) {
+        Department department = departmentService.getById(id);
+        if (department == null) return "redirect:/department";
+        model.addAttribute("department", department);
+        return "department/edit-department";
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteDepartment(@PathVariable long id) {
         departmentService.deleteById(id);
