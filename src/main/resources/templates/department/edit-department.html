@@ -9,7 +9,7 @@
 
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
-    <form action="#" th:action="@{/department/save}" th:object="${department}" method="post">
+    <form action="#" th:action="@{/department/update/{id}(id=${department.id})}" th:object="${department}" method="post">
         <div class="form-group">
             <label for="code">Department Code</label>
             <input type="text" th:field="*{code}" class="form-control" id="code" aria-describedby="emailHelp" placeholder="Enter email">
@@ -20,7 +20,10 @@
             <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Password">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Invalid Name</p>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <div th:if="${errorMessage}">
+            <p th:text="${errorMessage}" class="text-danger">An error occurred</p>
+        </div>
     </form>
 </div>
 

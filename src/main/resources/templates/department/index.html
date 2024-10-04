@@ -20,24 +20,43 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="department,iterStat : ${departments}">
+            <tr th:each="department,iterStat : ${departmentPage.content}">
                 <th scope="row" th:text="${iterStat.count}">1</th>
                 <td th:text="${department.code}">HR001</td>
                 <td th:text="${department.name}">Human Resource</td>
                 <td>
                     <a th:href="@{/department/edit/{id}(id=${department.id})}" type="button" class="btn btn-primary">Update</a>
-                    <button onClick="deleteDepartmentById([[${department.id}]])" type="button" class="btn btn-danger">Delete</button>
+                    <button th:onclick="|deleteDepartmentById(${department.id})|" type="button" class="btn btn-danger">Delete</button>
                 </td>
             </tr>
             </tbody>
         </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item" th:class="${departmentPage.hasPrevious() ? '' : 'disabled'}">
+                    <a class="page-link" th:href="@{/department(page=${departmentPage.number - 1})}" th:if="${departmentPage.hasPrevious()}">Trang trước</a>
+                </li>
+
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, departmentPage.totalPages - 1)}" th:class="${i == departmentPage.number ? 'active' : ''}">
+                    <a class="page-link" th:href="@{/department(page=${i})}" th:text="${i + 1}"></a>
+                </li>
+
+                <li class="page-item" th:class="${departmentPage.hasNext() ? '' : 'disabled'}">
+                    <a class="page-link" th:href="@{/department(page=${departmentPage.number + 1})}" th:if="${departmentPage.hasNext()}">Trang tiếp theo</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <footer th:replace="~{layouts/base :: footer}"></footer>
-    <script>
+
+    <script th:inline="javascript">
         function deleteDepartmentById(id) {
+            let deleteUrl = "[(@{/department/delete/})]" +id
+
             window.confirm("Are you sure want to delete this department") &&
-            fetch("/department/delete/" + id, {
+            fetch(deleteUrl, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -46,8 +65,15 @@
             .then(response => {
             if (response.ok) {
                 window.location.reload();
-            }
-        });
+            } else {
+                return response.json().then(error => {
+                    throw new Error(error.message || 'Failed to delete the department.');
+                });
+            }})
+            .catch (error => {
+                console.error("Error: ", error)
+                alert('An error occurred: ' + error.message);
+            });
         }
     </script>
 </body>

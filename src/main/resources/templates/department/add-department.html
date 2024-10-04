@@ -12,12 +12,12 @@
     <form action="#" th:action="@{/department/save}" th:object="${department}" method="post">
         <div class="form-group">
             <label for="code">Department Code</label>
-            <input type="text" th:field="*{code}" class="form-control" id="code" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="text" th:field="*{code}" class="form-control" id="code" aria-describedby="emailHelp" placeholder="Enter Code">
             <p th:if="${#fields.hasErrors('code')}" th:errors="*{code}" class="text-danger">Invalid Code</p>
         </div>
         <div class="form-group">
             <label for="name">Department Name</label>
-            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Password">
+            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Enter name">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Invalid Name</p>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>

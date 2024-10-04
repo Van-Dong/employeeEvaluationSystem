@@ -2,18 +2,20 @@ package com.dongnv.employee_evaluation_system.controller;
 
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.service.DepartmentService;
-import com.dongnv.employee_evaluation_system.serviceImpl.DepartmentServiceImpl;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Controller
@@ -25,9 +27,10 @@ public class DepartmentController {
     DepartmentService departmentService;
 
     @GetMapping
-    public String getAllDepartments(Model model) {
-        List<Department> departments = departmentService.getAll();
-        model.addAttribute("departments", departments);
+    public String getAllDepartments(@RequestParam(defaultValue = "0") int page, Model model) {
+//        List<Department> departments = departmentService.getAll();
+        Page<Department> departmentPage = departmentService.findPaginated(page);
+        model.addAttribute("departmentPage", departmentPage);
         return "department/index";
     }
 
@@ -38,7 +41,7 @@ public class DepartmentController {
     }
 
     @PostMapping("/save")
-    public String addDepartment(@Valid Department department, BindingResult bindingResult, Model model) {
+    public String addDepartment(@Valid Department department, BindingResult bindingResult) {
         if (departmentService.existsByCode(department.getCode())) {
             bindingResult.rejectValue("code", "error.department", "Department code already exist");
         }
@@ -57,9 +60,24 @@ public class DepartmentController {
         return "department/edit-department";
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteDepartment(@PathVariable long id) {
-        departmentService.deleteById(id);
+    @PostMapping("/update/{id}")
+    public String updateDepartment(@Valid Department department, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "department/edit-department";
+        }
+        try {
+            departmentService.save(department);
+        } catch (ConstraintViolationException e) {
+            model.addAttribute("errorMessage", "Name or code already exist");
+            return "department/edit-department";
+        }
         return "redirect:/department";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteDepartment(@PathVariable long id) {
+        departmentService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

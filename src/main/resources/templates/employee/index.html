@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/base :: head('Employee Manager')}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:replace="~{layouts/base :: header}"></header>
+
+<!--  Content  -->
+<div class="my-4 px-3" style="min-height: 80vh">
+    <a th:href="@{/employee/create}" type="button" class="btn btn-primary">Create New Employee</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">FullName</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Date of birth</th>
+            <th scope="col">Level</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Profile Image</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Note</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee,iterStat : ${employees}">
+            <td th:text="${employee.id}">1</td>
+            <td th:text="${employee.fullName}">Nguyen Van Dong</td>
+            <td th:text="${employee.isMale} ? 'Male' : 'Female'">Men</td>
+            <td th:text="${employee.dob}">14-07-2002</td>
+            <td th:text="${employee.level}">1</td>
+            <td th:text="${employee.salary}">9000</td>
+            <td><img th:src="|/${employee.imageUrl}|" th:alt="${employee.fullName}" class="rounded-circle object-fit-cover" style="width: 80px; height: 80px; "/></td>
+            <td th:text="${employee.email}">dong4724@gmail.com</td>
+            <td th:text="${employee.phone}">099999999</td>
+            <td th:text="${employee.note}">....</td>
+            <td>
+                <a th:href="@{/employee/edit/{id}(id=${employee.id})}" type="button" class="btn btn-primary">Update</a>
+                <button th:onclick="|deleteEmployeeById(${employee.id})|" type="button" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<footer th:replace="~{layouts/base :: footer}"></footer>
+
+<script th:inline="javascript">
+    function deleteEmployeeById(id) {
+        let deleteUrl = "[(@{/employee/delete/})]" +id
+
+        window.confirm("Are you sure want to delete this employee") &&
+        fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    return response.json().then(error => {
+                        throw new Error(error.message || 'Failed to delete the employee.');
+                    });
+                }})
+            .catch (error => {
+                console.error("Error: ", error)
+                alert('An error occurred: ' + error.message);
+            });
+    }
+</script>
+</body>
+</html>

@@ -13,14 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString
 @Entity
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String fullName;
-    Boolean isMen;
-    String profileUrl;
+    Boolean isMale;
+    String imageUrl;
     LocalDate dob;
     Double salary;
     Byte level;

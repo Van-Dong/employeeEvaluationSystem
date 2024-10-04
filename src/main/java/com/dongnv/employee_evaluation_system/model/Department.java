@@ -28,6 +28,6 @@ public class Department {
     @Column(unique = true)
     String name;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     List<Employee> employees;
 }
