@@ -40,15 +40,19 @@
         </div>
 
         <!-- Department -->
+<!--        <div class="form-group">-->
+<!--            <label for="department">Phòng Ban:</label>-->
+<!--            <select class="form-select" id="department" name="departmentId" th:field="*{departmentId}">-->
+<!--                <option value="" disabled selected>Chọn Phòng Ban</option>-->
+<!--                <option th:each="d : ${departments}" th:text="|${d.name} - ${d.code}|" th:value="${d.id}">One</option>-->
+<!--            </select>-->
+<!--        </div>-->
         <div class="form-group">
             <label for="department">Phòng Ban:</label>
-            <select class="form-select" id="department" required name="departmentId">
+            <select class="form-select" id="department" name="departmentId">
                 <option value="" disabled selected>Chọn Phòng Ban</option>
                 <option th:each="d : ${departments}" th:text="|${d.name} - ${d.code}|" th:value="${d.id}">One</option>
             </select>
-<!--            <label for="department">Salary:</label>-->
-<!--            <input class="form-control" type="number" step="0.01" id="department" th:field="*{salary}" />-->
-<!--            <div th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="error"></div>-->
         </div>
 
         <!-- Salary -->

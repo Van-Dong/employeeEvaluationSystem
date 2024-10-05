@@ -1,13 +1,18 @@
-<!doctype html>
-<html lang="en">
-<head>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/base :: head('Department Manager')}">
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Title</title>
 </head>
 <body>
-Hello test
+<header th:replace="~{layouts/base :: header}"></header>
+
+<!--  Content  -->
+<div class="my-4 px-3" style="min-height: 80vh">
+    Home page
+</div>
+
+<footer th:replace="~{layouts/base :: footer}"></footer>
+
 </body>
 </html>

@@ -29,6 +29,10 @@ public class Employee {
     String phone;
     String note;
 
-    @OneToMany
+    @ManyToOne
+    Department department;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
     List<Evaluation> evaluations;
 }

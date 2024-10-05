@@ -20,6 +20,9 @@
             <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Enter name">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Invalid Name</p>
         </div>
+        <div th:if="${errorMessage}">
+            <p th:text="${errorMessage}" class="text-danger">An error occurred</p>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

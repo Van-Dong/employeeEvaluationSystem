@@ -2,10 +2,10 @@ package com.dongnv.employee_evaluation_system.controller;
 
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.model.Employee;
-import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
 import com.dongnv.employee_evaluation_system.service.DepartmentService;
 import com.dongnv.employee_evaluation_system.service.EmployeeService;
 import com.dongnv.employee_evaluation_system.service.FileStorageService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -40,18 +40,14 @@ public class EmployeeController {
     @GetMapping("/create")
     String createEmployee(Model model) {
         Employee employee = new Employee();
-        List<Department> departments = departmentService.getAll();
+        List<Department> departments = departmentService.getAllDepartments();
         model.addAttribute("departments", departments);
         model.addAttribute("employee", employee);
         return "employee/add-employee";
     }
 
     @PostMapping("/save")
-    String saveEmployee(@RequestParam("imageFile") MultipartFile file, Employee employee, @RequestParam long departmentId, BindingResult result) {
-        log.info("DEPARTMENT ID " + departmentId);
-        Department department = departmentService.getById(departmentId);
-        department.getEmployees().add(employee);
-        departmentService.save(department);
+    String saveEmployee(@RequestParam("imageFile") MultipartFile file, @RequestParam Integer departmentId, Employee employee, BindingResult result) {
         try {
             String imagePath = fileStorageService.storeFile(file);
             employee.setImageUrl(imagePath);
@@ -61,15 +57,41 @@ public class EmployeeController {
         if (result.hasErrors()) {
             return "employee/add-employee";
         }
-//    employeeService.save(employee);
+        employee.setDepartment(departmentService.getDepartmentById(departmentId));
+    employeeService.save(employee);
     return "redirect:/employee";
 }
 
     @GetMapping("/edit/{id}")
     String editEmployee(@PathVariable long id, Model model) {
         Employee employee = employeeService.getById(id);
+        List<Department> departments = departmentService.getAllDepartments();
+        model.addAttribute("departments", departments);
         model.addAttribute("employee", employee);
         return "employee/edit-employee";
+    }
+
+    @PostMapping("/update/{id}")
+    String updateEmployee(@RequestParam("imageFile") MultipartFile file, @PathVariable long id, @Valid Employee employee, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "employee/edit-employee";
+        }
+
+        Employee employeeOld = employeeService.getById(id);
+
+        if (file == null || file.isEmpty()) {
+            employee.setImageUrl(employeeOld.getImageUrl());
+        } else {
+            try {
+                String imagePath = fileStorageService.storeFile(file);
+                employee.setImageUrl(imagePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        employeeService.save(employee);
+        return "redirect:/employee";
     }
 
     @DeleteMapping("/delete/{id}")

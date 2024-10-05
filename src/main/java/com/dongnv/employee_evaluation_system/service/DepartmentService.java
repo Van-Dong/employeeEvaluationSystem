@@ -1,13 +1,15 @@
 package com.dongnv.employee_evaluation_system.service;
 
+import com.dongnv.employee_evaluation_system.dto.mapper.DepartmentMapper;
+import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
+import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +19,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentService {
     DepartmentRepository departmentRepository;
+    EmployeeRepository employeeRepository;
+    DepartmentMapper departmentMapper;
 
-    public List<Department> getAll() {
+    public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
 
-    public Page<Department> findPaginated(int page) {
-        return departmentRepository.findAll(PageRequest.of(page, 10));
+    public Page<Department> getDepartmentsByPage(int page) {
+        Page<Department> departmentList = departmentRepository.findAll(PageRequest.of(page, 10));
+        departmentList.getContent().forEach(d -> d.setCountEmployee(employeeRepository.countByDepartmentId(d.getId())));
+        return departmentList;
     }
 
-    public Department getById(Long id) {
+    public Department getDepartmentById(Integer id) {
         return departmentRepository.findById(id).orElse(null);
     }
 
-    public void save(Department department) {
+    public void saveDepartment(Department department) {
         departmentRepository.save(department);
     }
 
-    public void deleteById(Long id) {
+    public void updateDepartment(DepartmentDTO departmentDTO, Integer id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found department with ID: " + id));
+        departmentMapper.updatedDepartment(department, departmentDTO);
+        departmentRepository.save(department);
+    }
+
+    public void deleteDepartmentById(Integer id) {
         departmentRepository.deleteById(id);
     }
 
-    public boolean existsByName(String name) {
-        return departmentRepository.existsByName(name);
-    }
-
-    public boolean existsByCode(String code) {
-        return departmentRepository.existsByCode(code);
-    }
 }

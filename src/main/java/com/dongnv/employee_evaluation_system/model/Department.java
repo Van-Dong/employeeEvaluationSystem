@@ -18,8 +18,10 @@ import java.util.List;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Integer id;
 
+    @NotNull
+    @NotBlank
     @Column(unique = true)
     String code;
 
@@ -29,5 +31,13 @@ public class Department {
     String name;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
     List<Employee> employees;
+
+    @Transient
+    Integer countEmployee;
+
+//    public Integer getCountEmployee() {
+//        return this.employees.size();
+//    }
 }

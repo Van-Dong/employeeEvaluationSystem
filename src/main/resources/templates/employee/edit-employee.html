@@ -37,8 +37,17 @@
     <!-- Date of Birth -->
     <div class="form-group">
       <label for="dob">Date of Birth:</label>
-      <input class="form-control" type="date" id="dob" th:field="*{dob}" th:value="*{dob.toString()}"/>
+      <input class="form-control" type="date" id="dob" th:field="*{dob}" th:value="*{dob}"/>
       <div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}" class="error"></div>
+    </div>
+
+    <!-- Department -->
+    <div class="form-group">
+      <label for="department">Phòng Ban:</label>
+      <select class="form-select" id="department" name="departmentId" th:field="*{departmentId}">
+        <option value="" disabled selected>Chọn Phòng Ban</option>
+        <option th:each="d : ${departments}" th:text="|${d.name} - ${d.code}|" th:value="${d.id}" th:selected="${d.id == departmentId}">One</option>
+      </select>
     </div>
 
     <!-- Salary -->
