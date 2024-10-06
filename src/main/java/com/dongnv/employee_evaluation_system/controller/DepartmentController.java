@@ -36,17 +36,17 @@ public class DepartmentController {
 
     @GetMapping("/create")
     public String createDepartment(Model model) {
-        model.addAttribute("department", new Department());
+        model.addAttribute("departmentDTO", new DepartmentDTO());
         return "department/add-department";
     }
 
     @PostMapping("/save")
-    public String createDepartment(@Valid Department department, BindingResult bindingResult, Model model) {
+    public String createDepartment(@Valid DepartmentDTO departmentDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "department/add-department";
         }
         try {
-            departmentService.saveDepartment(department);
+            departmentService.saveDepartment(departmentDTO);
         } catch (DataIntegrityViolationException exception) {
             model.addAttribute("errorMessage", "Duplicate name or code.");
             return "department/add-department";
@@ -56,31 +56,26 @@ public class DepartmentController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editDepartment(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
-        Department department = departmentService.getDepartmentById(id);
-        if (department == null) {
-            redirectAttributes.addFlashAttribute("message", "Not found department with ID: " + id);
-            return "redirect:/department";
-        }
-        model.addAttribute("department", department);
+    public String editDepartment(@PathVariable Integer id, Model model) {
+        DepartmentDTO departmentDTO = departmentService.getDepartmentById(id);
+        model.addAttribute("departmentDTO", departmentDTO);
         return "department/edit-department";
     }
 
     @PostMapping("/update/{id}")
-    public String updateDepartment(@Valid DepartmentDTO departmentDTO, @PathVariable Integer id, BindingResult bindingResult, Model model) {
+    public String updateDepartment(@PathVariable Integer id, @Valid DepartmentDTO departmentDTO,
+                                   BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "department/edit-department";
         }
-        log.info("DEPARTMENTDTO: " + departmentDTO);
+//        log.info("DEPARTMENTDTO: " + departmentDTO);
         try {
             departmentService.updateDepartment(departmentDTO, id);
         } catch (ConstraintViolationException e) {
             model.addAttribute("errorMessage", "Duplicate name or code.");
             return "department/edit-department";
-        } catch (RuntimeException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "department/edit-department";
         }
+
         return "redirect:/department";
     }
 

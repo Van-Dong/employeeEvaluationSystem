@@ -9,44 +9,42 @@
 
 <!--  Content  -->
 <div class="my-4 px-3 mx-auto" style="min-height: 80vh; max-width: 800px;">
-  <h2 th:unless="${employee}">Employee Not Found</h2>
-  <form th:action="@{/employee/update/{id}(id=${employee.id})}" th:if="${employee}" th:object="${employee}" method="post" enctype="multipart/form-data">
+  <form th:action="@{/employee/update/{id}(id=${employeeDTO.id})}" th:if="${employeeDTO}" th:object="${employeeDTO}" method="post" enctype="multipart/form-data">
 
     <!-- Full Name -->
     <div class="form-group">
       <label for="fullName">Full Name:</label>
       <input class="form-control" type="text" id="fullName" th:field="*{fullName}" />
-      <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="error"></div>
+      <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}" class="text-danger"></div>
     </div>
 
     <!-- Gender -->
     <div class="my-3">
       <label for="isMale">Is Male:</label>
       <input type="checkbox" id="isMale" th:field="*{isMale}" />
-      <div th:if="${#fields.hasErrors('isMale')}" th:errors="*{isMale}" class="error"></div>
+      <div th:if="${#fields.hasErrors('isMale')}" th:errors="*{isMale}" class="text-danger"></div>
     </div>
 
     <!-- Image file -->
     <div class="form-group">
       <label for="imageFile">Image file:</label>
       <input class="form-control" type="file" id="imageFile" name="imageFile"/>
-      <img th:src="|/${employee.imageUrl}|" th:alt="${employee.fullName}" class="rounded-circle object-fit-cover" style="width: 80px; height: 80px; "/>
-      <!--            <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}" class="error"></div>-->
+      <img th:if="*{imageUrl}" th:src="|/*{imageUrl}|" th:alt="*{fullName}" class="rounded-circle object-fit-cover" style="width: 80px; height: 80px; "/>
     </div>
 
     <!-- Date of Birth -->
     <div class="form-group">
       <label for="dob">Date of Birth:</label>
       <input class="form-control" type="date" id="dob" th:field="*{dob}" th:value="*{dob}"/>
-      <div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}" class="error"></div>
+      <div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}" class="text-danger"></div>
     </div>
 
     <!-- Department -->
     <div class="form-group">
-      <label for="department">Phòng Ban:</label>
-      <select class="form-select" id="department" name="departmentId" th:field="*{departmentId}">
-        <option value="" disabled selected>Chọn Phòng Ban</option>
-        <option th:each="d : ${departments}" th:text="|${d.name} - ${d.code}|" th:value="${d.id}" th:selected="${d.id == departmentId}">One</option>
+      <label for="departmentId">Phòng Ban:</label>
+      <select class="form-select" id="departmentId" name="departmentId">
+        <option value="">Chọn Phòng Ban</option>
+        <option th:each="d : ${departments}" th:text="|${d.name} - ${d.code}|" th:value="${d.id}" th:selected="${d.id == employeeDTO.departmentId}">One</option>
       </select>
     </div>
 
@@ -54,35 +52,35 @@
     <div class="form-group">
       <label for="salary">Salary:</label>
       <input class="form-control" type="number" step="0.01" id="salary" th:field="*{salary}" />
-      <div th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="error"></div>
+      <div th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="text-danger"></div>
     </div>
 
     <!-- Level -->
     <div class="form-group">
       <label for="level">Level:</label>
       <input class="form-control" type="number" id="level" th:field="*{level}" />
-      <div th:if="${#fields.hasErrors('level')}" th:errors="*{level}" class="error"></div>
+      <div th:if="${#fields.hasErrors('level')}" th:errors="*{level}" class="text-danger"></div>
     </div>
 
     <!-- Email -->
     <div class="form-group">
       <label for="email">Email:</label>
       <input class="form-control" type="email" id="email" th:field="*{email}" />
-      <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+      <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
     </div>
 
     <!-- Phone -->
     <div class="form-group">
       <label for="phone">Phone:</label>
       <input class="form-control" type="text" id="phone" th:field="*{phone}" />
-      <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="error"></div>
+      <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></div>
     </div>
 
     <!-- Note -->
     <div class="form-group">
       <label for="note">Note:</label> <br/>
       <textarea id="note" th:field="*{note}"></textarea>
-      <div th:if="${#fields.hasErrors('note')}" th:errors="*{note}" class="error"></div>
+      <div th:if="${#fields.hasErrors('note')}" th:errors="*{note}" class="text-danger"></div>
     </div>
 
 

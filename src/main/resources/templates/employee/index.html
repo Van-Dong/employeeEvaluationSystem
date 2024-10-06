@@ -9,6 +9,9 @@
 
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
+    <div th:if="${message}" class="alert alert-warning">
+        <p th:text="${message}"></p>
+    </div>
     <a th:href="@{/employee/create}" type="button" class="btn btn-primary">Create New Employee</a>
     <table class="table">
         <thead>
@@ -19,6 +22,7 @@
             <th scope="col">Date of birth</th>
             <th scope="col">Level</th>
             <th scope="col">Salary</th>
+            <th scope="col">Department</th>
             <th scope="col">Profile Image</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
@@ -26,13 +30,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="employee,iterStat : ${employees}">
+        <tr th:each="employee,iterStat : ${employeePage.content}">
             <td th:text="${employee.id}">1</td>
             <td th:text="${employee.fullName}">Nguyen Van Dong</td>
             <td th:text="${employee.isMale} ? 'Male' : 'Female'">Men</td>
             <td th:text="${employee.dob}">14-07-2002</td>
             <td th:text="${employee.level}">1</td>
             <td th:text="${employee.salary}">9000</td>
+            <th th:text="${employee.department} ? |${employee.department.code} - ${employee.department.name}| : 'No Department'">No Department</th>
             <td><img th:src="|/${employee.imageUrl}|" th:alt="${employee.fullName}" class="rounded-circle object-fit-cover" style="width: 80px; height: 80px; "/></td>
             <td th:text="${employee.email}">dong4724@gmail.com</td>
             <td th:text="${employee.phone}">099999999</td>
@@ -44,6 +49,21 @@
         </tr>
         </tbody>
     </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:class="${employeePage.hasPrevious() ? '' : 'disabled'}">
+                <a class="page-link" th:href="@{/employee(page=${employeePage.number - 1})}" th:if="${employeePage.hasPrevious()}">Trang trước</a>
+            </li>
+
+            <li class="page-item" th:if="${employeePage.totalPages > 0}" th:each="i : ${#numbers.sequence(0, employeePage.totalPages - 1)}" th:class="${i == employeePage.number ? 'active' : ''}">
+                <a class="page-link" th:href="@{/employee(page=${i})}" th:text="${i + 1}"></a>
+            </li>
+
+            <li class="page-item" th:class="${employeePage.hasNext() ? '' : 'disabled'}">
+                <a class="page-link" th:href="@{/employee(page=${employeePage.number + 1})}" th:if="${employeePage.hasNext()}">Trang tiếp theo</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <footer th:replace="~{layouts/base :: footer}"></footer>

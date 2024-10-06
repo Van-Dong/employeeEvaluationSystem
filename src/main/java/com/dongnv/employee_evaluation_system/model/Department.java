@@ -20,13 +20,9 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @NotNull
-    @NotBlank
     @Column(unique = true)
     String code;
 
-    @NotBlank
-    @NotNull
     @Column(unique = true)
     String name;
 

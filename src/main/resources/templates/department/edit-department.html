@@ -9,7 +9,7 @@
 
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
-    <form action="#" th:action="@{/department/update/{id}(id=${department.id})}" th:object="${department}" method="post">
+    <form action="#" th:action="@{/department/update/{id}(id=${departmentDTO.id})}" th:object="${departmentDTO}" method="post">
         <div class="form-group">
             <label for="code">Department Code</label>
             <input type="text" th:field="*{code}" class="form-control" id="code" aria-describedby="emailHelp" placeholder="Enter email">

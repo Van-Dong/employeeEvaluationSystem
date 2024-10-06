@@ -2,6 +2,8 @@ package com.dongnv.employee_evaluation_system.service;
 
 import com.dongnv.employee_evaluation_system.dto.mapper.DepartmentMapper;
 import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
+import com.dongnv.employee_evaluation_system.exception.AppException;
+import com.dongnv.employee_evaluation_system.exception.ErrorCode;
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
 import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
@@ -32,17 +34,19 @@ public class DepartmentService {
         return departmentList;
     }
 
-    public Department getDepartmentById(Integer id) {
-        return departmentRepository.findById(id).orElse(null);
+    public DepartmentDTO getDepartmentById(Integer id) {
+        Department department = departmentRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
+        return departmentMapper.toDepartmentDTO(department);
     }
 
-    public void saveDepartment(Department department) {
+    public void saveDepartment(DepartmentDTO departmentDTO) {
+        Department department = departmentMapper.toDepartment(departmentDTO);
         departmentRepository.save(department);
     }
 
     public void updateDepartment(DepartmentDTO departmentDTO, Integer id) {
         Department department = departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found department with ID: " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
         departmentMapper.updatedDepartment(department, departmentDTO);
         departmentRepository.save(department);
     }

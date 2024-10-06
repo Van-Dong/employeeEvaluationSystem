@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/base :: head('Employee Manager')}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:replace="~{layouts/base :: header}"></header>
+
+<!--  Content  -->
+<div class="my-4 px-3" style="min-height: 80vh">
+
+    <div th:if="${errorMessage}" th:object="${errorMessage}" class="alert alert-danger">
+        <p>Message: <span th:text="${errorMessage}"></span></p>
+    </div>
+</div>
+
+<footer th:replace="~{layouts/base :: footer}"></footer>
+</body>
+</html>

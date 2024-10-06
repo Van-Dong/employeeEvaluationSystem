@@ -1,6 +1,8 @@
 package com.dongnv.employee_evaluation_system.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,11 +17,19 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString
 @Entity
+@Table(name = "employee", indexes = {
+        @Index(name = "idx_employee_full_name", columnList = "full_name")
+})
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @NotBlank
+    @NotNull
     String fullName;
+
+    @NotNull
     Boolean isMale;
     String imageUrl;
     LocalDate dob;

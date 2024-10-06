@@ -1,13 +1,24 @@
 package com.dongnv.employee_evaluation_system.exception.handler;
 
+import com.dongnv.employee_evaluation_system.exception.AppException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-    @ExceptionHandler
+    @ExceptionHandler(value = RuntimeException.class)
     public String handlingException(RuntimeException exception) {
-        exception.printStackTrace();
+        log.info("Exception: " + exception);
         return "index";
+    }
+
+    @ExceptionHandler(value = AppException.class)
+    public String handlingAppException(AppException exception, Model model) {
+        log.info("Exception: " + exception);
+        model.addAttribute("errorMessage", exception.getErrorCode().getMessage());
+        return "error/400";
     }
 }

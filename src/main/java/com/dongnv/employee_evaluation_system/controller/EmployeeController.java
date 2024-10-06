@@ -1,5 +1,6 @@
 package com.dongnv.employee_evaluation_system.controller;
 
+import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.model.Employee;
 import com.dongnv.employee_evaluation_system.service.DepartmentService;
@@ -10,12 +11,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,70 +30,52 @@ import java.util.List;
 @Slf4j
 public class EmployeeController {
     EmployeeService employeeService;
-    FileStorageService fileStorageService;
     DepartmentService departmentService;
 
     @GetMapping
-    String getAllEmployee(Model model) {
-        List<Employee> employees = employeeService.getAll();
-        model.addAttribute("employees", employees);
+    String getAllEmployees(@RequestParam(defaultValue = "0") Integer page, Model model) {
+        if (page < 0) page = 0;
+        Page<Employee> employeePage = employeeService.getEmployeesByPage(page);
+        model.addAttribute("employeePage", employeePage);
         return "employee/index";
     }
 
     @GetMapping("/create")
     String createEmployee(Model model) {
-        Employee employee = new Employee();
+        EmployeeDTO employeeDTO = new EmployeeDTO();
         List<Department> departments = departmentService.getAllDepartments();
         model.addAttribute("departments", departments);
-        model.addAttribute("employee", employee);
+        model.addAttribute("employeeDTO", employeeDTO);
         return "employee/add-employee";
     }
 
     @PostMapping("/save")
-    String saveEmployee(@RequestParam("imageFile") MultipartFile file, @RequestParam Integer departmentId, Employee employee, BindingResult result) {
-        try {
-            String imagePath = fileStorageService.storeFile(file);
-            employee.setImageUrl(imagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    String createEmployee(@Valid EmployeeDTO employeeDTO, BindingResult result) {
         if (result.hasErrors()) {
             return "employee/add-employee";
         }
-        employee.setDepartment(departmentService.getDepartmentById(departmentId));
-    employeeService.save(employee);
+        log.info("EMPLOYEE DTO: " + employeeDTO);
+        employeeService.save(employeeDTO);
     return "redirect:/employee";
 }
 
     @GetMapping("/edit/{id}")
-    String editEmployee(@PathVariable long id, Model model) {
-        Employee employee = employeeService.getById(id);
+    String editEmployee(@PathVariable long id, Model model, RedirectAttributes redirectAttributes) {
+        EmployeeDTO employeeDTO = employeeService.getEmployeeById(id);
         List<Department> departments = departmentService.getAllDepartments();
         model.addAttribute("departments", departments);
-        model.addAttribute("employee", employee);
+        model.addAttribute("employeeDTO", employeeDTO);
         return "employee/edit-employee";
     }
 
     @PostMapping("/update/{id}")
-    String updateEmployee(@RequestParam("imageFile") MultipartFile file, @PathVariable long id, @Valid Employee employee, BindingResult bindingResult) {
+    String updateEmployee(@PathVariable long id, @Valid EmployeeDTO employeeDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            List<Department> departments = departmentService.getAllDepartments();
+            model.addAttribute("departments", departments);
             return "employee/edit-employee";
         }
-
-        Employee employeeOld = employeeService.getById(id);
-
-        if (file == null || file.isEmpty()) {
-            employee.setImageUrl(employeeOld.getImageUrl());
-        } else {
-            try {
-                String imagePath = fileStorageService.storeFile(file);
-                employee.setImageUrl(imagePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        employeeService.save(employee);
+        employeeService.updateEmployee(employeeDTO, id);
         return "redirect:/employee";
     }
 
