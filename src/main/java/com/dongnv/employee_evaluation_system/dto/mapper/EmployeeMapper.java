@@ -10,9 +10,12 @@ import org.mapstruct.MappingTarget;
 public interface EmployeeMapper {
 
     @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "id", ignore = true)
     void updatedEmployee(@MappingTarget Employee employee, EmployeeDTO employeeDTO);
 
     @Mapping(target = "imageUrl", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Employee toEmployee(EmployeeDTO employeeDTO);
+
     EmployeeDTO toEmployeeDTO(Employee employee);
 }

@@ -39,7 +39,7 @@ public class DepartmentService {
         return departmentMapper.toDepartmentDTO(department);
     }
 
-    public void saveDepartment(DepartmentDTO departmentDTO) {
+    public void createDepartment(DepartmentDTO departmentDTO) {
         Department department = departmentMapper.toDepartment(departmentDTO);
         departmentRepository.save(department);
     }

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,7 +45,7 @@ public class DepartmentController {
             return "department/add-department";
         }
         try {
-            departmentService.saveDepartment(departmentDTO);
+            departmentService.createDepartment(departmentDTO);
         } catch (DataIntegrityViolationException exception) {
             model.addAttribute("errorMessage", "Duplicate name or code.");
             return "department/add-department";
