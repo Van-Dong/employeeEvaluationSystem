@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/base :: head('Evaluation Manager')}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<header th:replace="~{layouts/base :: header}"></header>
+
+<!--  Content  -->
+<div class="my-4 px-3" style="min-height: 80vh">
+  <div th:if="${message}" class="alert alert-warning">
+    <p th:text="${message}"></p>
+  </div>
+  <div th:if="${employee}" th:object="${employee}">
+    <h2>Evaluation for: <span th:text="|*{fullName} - ID *{id}|"></span></h2>
+  </div>
+  <button th:unless="${all}" type="button" class="btn btn-primary btn-add-evaluation"
+     data-bs-toggle="modal" data-bs-target="#create_evaluation_modal" th:data-employeeid="${employee.id}"
+  >New Evaluation</button>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Evaluation Date</th>
+      <th scope="col">Type Evaluation</th>
+      <th scope="col">Reason</th>
+      <th scope="col" th:if="${all}">Employee</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="evaluation,iterStat : ${evaluationPage.content}">
+      <th scope="row" th:text="${iterStat.count}">1</th>
+      <td th:text="${evaluation.evaluationDate}">HR001</td>
+      <td th:text="${evaluation.isCommended} ? 'Reward' : 'Discripline'">Discripline</td>
+      <td th:text="${evaluation.reason}">Be Late</td>
+      <td th:if="${all}" th:text="${evaluation.employee != null ? evaluation.employee.fullName : ''}"></td>
+      <td>
+        <button type="button"
+                th:data-id="${evaluation.id}"
+                th:data-iscommended="${evaluation.isCommended}"
+                th:data-reason="${evaluation.reason}"
+                class="btn btn-primary btn-update-evaluation"
+                data-bs-toggle="modal" data-bs-target="#update_evaluation_modal">
+          Update
+        </button>
+        <button th:onclick="|deleteEvaluationById(${evaluation.id})|" type="button" class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item" th:class="${evaluationPage.hasPrevious() ? '' : 'disabled'}">
+        <a class="page-link" th:href="@{/evaluation(page=${evaluationPage.number - 1})}" th:if="${evaluationPage.hasPrevious()}">Trang trước</a>
+      </li>
+
+      <li class="page-item" th:if="${evaluationPage.totalPages > 0}" th:each="i : ${#numbers.sequence(0, evaluationPage.totalPages - 1)}"
+          th:class="${i == evaluationPage.number ? 'active' : ''}">
+        <a class="page-link" th:href="@{/evaluation(page=${i})}" th:text="${i + 1}"></a>
+      </li>
+
+      <li class="page-item" th:class="${evaluationPage.hasNext() ? '' : 'disabled'}">
+        <a class="page-link" th:href="@{/evaluation(page=${evaluationPage.number + 1})}" th:if="${evaluationPage.hasNext()}">Trang tiếp theo</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<footer th:replace="~{layouts/base :: footer}"></footer>
+<div th:replace="~{layouts/base :: toast}"></div>
+
+<!--Modals-->
+<div th:replace="~{modal/modals :: update_evaluation}"></div>
+<div th:replace="~{modal/modals :: create_evaluation}"></div>
+
+<script th:inline="javascript">
+  function deleteEvaluationById(id) {
+    let deleteUrl = "[(@{/evaluation/delete/})]" +id
+
+    window.confirm("Are you sure want to delete this evaluation") &&
+    fetch(deleteUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => {
+              if (response.ok) {
+                window.location.reload();
+              } else {
+                return response.json().then(error => {
+                  throw new Error(error.message || 'Failed to delete the evaluation.');
+                });
+              }})
+            .catch (error => {
+              console.error("Error: ", error)
+              alert('An error occurred: ' + error.message);
+            });
+  }
+
+  $(document).ready(function(){
+    // Logic
+
+    // Set value to update form
+    $(".btn-update-evaluation").click(function (e) {
+      $("#isCommended_update").prop("checked", $(this).data("iscommended"))
+      $("#reason_update").val($(this).data("reason"))
+      $("#btn_submit_update_evaluation").val($(this).data("id"))
+    })
+
+    // Move employeeId to creation evaluation form
+    $(".btn-add-evaluation").click(function(){
+      let employeeId = $(this).data("employeeid");
+      console.log("Employee ID: ", employeeId)
+      $("#btn_submit_create_evaluation").val(employeeId);
+    });
+
+    // Submit creation evaluation form
+    $("#create_evaluation_form").submit(function (e) {
+      e.preventDefault();
+      let employeeId =  $("#btn_submit_create_evaluation").val()
+
+      let form = $(this)
+      let formData = $(this).serialize()
+
+      let createUrl = "[(@{/evaluation/create/})]" + employeeId;
+      $.ajax({
+        url:  createUrl,
+        type: "POST",
+        data: formData,
+        success: function (response) {
+          createToast("info", "Create evaluation success!")
+          console.log("Success create evaluation!", response)
+          form.trigger('reset')
+          window.location.reload();
+        },
+        error: function (error) {
+          createToast("error", "Create evaluation failed!")
+          console.log("Error submitting form", error);
+        }
+      })
+    })
+
+    // Submit update evaluation form
+    $("#update_evaluation_form").submit(function (e) {
+      e.preventDefault();
+      let employeeId =  $("#btn_submit_update_evaluation").val()
+
+      let form = $(this)
+      let formData = $(this).serialize()
+
+      let updateUrl = "[(@{/evaluation/update/})]" + employeeId;
+      $.ajax({
+        url:  updateUrl,
+        type: "PUT",
+        data: formData,
+        success: function (response) {
+          createToast("info", "Update evaluation success!")
+          console.log("Success update evaluation!", response)
+          form.trigger('reset')
+          window.location.reload()
+        },
+        error: function (error) {
+          createToast("error", "Update evaluation failed!")
+          console.log("Error when update evaluation!", error);
+        }
+      })
+    })
+  });
+</script>
+</body>
+</html>

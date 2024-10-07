@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public String handlingException(RuntimeException exception) {
-        log.info("Exception: " + exception);
+        log.info("Exception: ", exception);
         return "index";
     }
 
     @ExceptionHandler(value = AppException.class)
     public String handlingAppException(AppException exception, Model model) {
-        log.info("Exception: " + exception);
+        log.info("Exception: ", exception);
         model.addAttribute("errorMessage", exception.getErrorCode().getMessage());
         return "error/400";
     }

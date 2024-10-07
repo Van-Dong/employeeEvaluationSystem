@@ -27,6 +27,8 @@
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
             <th scope="col">Note</th>
+            <th scope="col">Evaluation</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -38,10 +40,15 @@
             <td th:text="${employee.level}">1</td>
             <td th:text="${employee.salary}">9000</td>
             <th th:text="${employee.department} ? |${employee.department.code} - ${employee.department.name}| : 'No Department'">No Department</th>
-            <td><img th:src="|/${employee.imageUrl}|" th:alt="${employee.fullName}" class="rounded-circle object-fit-cover" style="width: 80px; height: 80px; "/></td>
+            <td><img th:if="${employee.imageUrl}" th:src="|/${employee.imageUrl}|" th:alt="${employee.fullName}" class="rounded-circle object-fit-cover" style="width: 80px; height: 80px; "/></td>
             <td th:text="${employee.email}">dong4724@gmail.com</td>
             <td th:text="${employee.phone}">099999999</td>
             <td th:text="${employee.note}">....</td>
+            <td>
+                <a th:href="@{/evaluation/{employeeid}(employeeid=${employee.id})}" class="btn btn-success">Watch</a>
+                <button data-bs-toggle="modal" data-bs-target="#create_evaluation_modal" data-th-attr="data-employeeid=${employee.id}"
+                        type="button" class="btn btn-primary btn-add-evaluation">Add</button>
+            </td>
             <td>
                 <a th:href="@{/employee/edit/{id}(id=${employee.id})}" type="button" class="btn btn-primary">Update</a>
                 <button th:onclick="|deleteEmployeeById(${employee.id})|" type="button" class="btn btn-danger">Delete</button>
@@ -68,6 +75,11 @@
 
 <footer th:replace="~{layouts/base :: footer}"></footer>
 
+<div th:replace="~{layouts/base :: toast}"></div>
+
+<!--Modal-->
+<div th:replace="~{modal/modals :: create_evaluation}"></div>
+
 <script th:inline="javascript">
     function deleteEmployeeById(id) {
         let deleteUrl = "[(@{/employee/delete/})]" +id
@@ -92,6 +104,43 @@
                 alert('An error occurred: ' + error.message);
             });
     }
+
+
+    $(document).ready(function(){
+
+        // Move employeeId to creation evaluation form
+        $(".btn-add-evaluation").click(function(){
+            let employeeId = $(this).data("employeeid");
+            console.log("Employee ID: ", employeeId)
+            $("#btn_submit_create_evaluation").val(employeeId);
+        });
+
+        // Submit creation evaluation form
+        $("#create_evaluation_form").submit(function (e) {
+            e.preventDefault();
+            let employeeId =  $("#btn_submit_create_evaluation").val()
+
+            let form = $(this)
+            let formData = $(this).serialize()
+
+            let createUrl = "[(@{/evaluation/create/})]" + employeeId;
+            $.ajax({
+                url:  createUrl,
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    createToast("info", "Create evaluation success!")
+                    console.log("Success create evaluation!", response)
+                    form.trigger('reset')
+                },
+                error: function (error) {
+                    createToast("error", "Create evaluation failed!")
+                    console.log("Error submitting form", error);
+                }
+            })
+        })
+    });
+
 </script>
 </body>
 </html>

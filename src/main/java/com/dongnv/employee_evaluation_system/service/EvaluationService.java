@@ -24,6 +24,10 @@ public class EvaluationService {
     EmployeeRepository employeeRepository;
     EvaluationMapper evaluationMapper;
 
+    public Page<Evaluation> getEvaluationByPage(Integer page) {
+        return evaluationRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Order.desc("evaluationDate"))));
+    }
+
     public Page<Evaluation> getEvaluationByEmployeeId(Long employeeId, Integer page) {
         return evaluationRepository.findByEmployeeId(employeeId,
                 PageRequest.of(page, 10, Sort.by(Sort.Order.desc("evaluationDate"))));

@@ -42,7 +42,7 @@ public class Employee {
     @ManyToOne
     Department department;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "employee_id")
     List<Evaluation> evaluations;
 }

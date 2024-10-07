@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!-- Modal create evalutaion -->
+<div class="modal fade" id="create_evaluation_modal" th:fragment="create_evaluation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header text-bg-primary">
+                <h4 class="modal-title">Create Evaluation For Employee</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" name="create_evaluation_form" id="create_evaluation_form" novalidate="novalidate">
+                <div class="modal-body">
+
+                    <!-- Discripline or Reward -->
+                    <div class="form-group">
+                        <div class="icheck-primary d-inline">
+                            <input type="checkbox" id="isCommended" name = "isCommended">
+                            <label for="isCommended" class="control-label">
+                                Is Reward
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Reason -->
+                    <div class="form-group">
+                        <label for="reason" class="control-label">Reason</label>
+                        <input type="text" class="form-control" id="reason" name="reason" value="">
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_create_evaluation">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal update evalutaion -->
+<div class="modal fade" id="update_evaluation_modal" th:fragment="update_evaluation">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header text-bg-primary">
+                <h4 class="modal-title">Create Evaluation For Employee</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" name="update_evaluation_form" id="update_evaluation_form" novalidate="novalidate">
+                <div class="modal-body">
+
+                    <!-- Discripline or Reward -->
+                    <div class="form-group">
+                        <div class="icheck-primary d-inline">
+                            <input type="checkbox" id="isCommended_update" name = "isCommended">
+                            <label for="isCommended_update" class="control-label">
+                                Is Reward
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Reason -->
+                    <div class="form-group">
+                        <label for="reason_update" class="control-label">Reason</label>
+                        <input type="text" class="form-control" id="reason_update" name="reason" value="">
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_update_evaluation">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

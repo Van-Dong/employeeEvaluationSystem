@@ -12,6 +12,5 @@ public interface DepartmentMapper {
     void updatedDepartment(@MappingTarget Department department, DepartmentDTO departmentDTO);
     Department toDepartment(DepartmentDTO departmentDTO);
 
-    @Mapping(target = "id", ignore = true)
     DepartmentDTO toDepartmentDTO(Department department);
 }

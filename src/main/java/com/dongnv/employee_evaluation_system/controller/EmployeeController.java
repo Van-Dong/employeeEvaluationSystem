@@ -50,8 +50,10 @@ public class EmployeeController {
     }
 
     @PostMapping("/save")
-    String createEmployee(@Valid EmployeeDTO employeeDTO, BindingResult result) {
+    String createEmployee(@Valid EmployeeDTO employeeDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            List<Department> departments = departmentService.getAllDepartments();
+            model.addAttribute("departments", departments);
             return "employee/add-employee";
         }
         log.info("EMPLOYEE DTO: " + employeeDTO);
@@ -85,5 +87,4 @@ public class EmployeeController {
         employeeService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 }

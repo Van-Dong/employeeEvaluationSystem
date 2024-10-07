@@ -33,13 +33,13 @@ public class EmployeeDTO {
     @Max(value = 10, message = "Level must be between in [1, 10]")
     Byte level;
 
-    @Email
+    @Email(message = "Invalid email")
     String email;
     String phone;
     String note;
     Integer departmentId;
     String imageUrl;
 
-    @FileConstraint
+    @FileConstraint(message = "Type of image not support")
     MultipartFile imageFile;
 }

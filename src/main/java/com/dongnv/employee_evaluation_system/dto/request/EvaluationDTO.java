@@ -18,8 +18,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class EvaluationDTO {
     Long id;
-    @NotNull
-    Boolean isCommended;
+    @Builder.Default
+    Boolean isCommended = false;
     String reason;
 
     LocalDate evaluationDate;
