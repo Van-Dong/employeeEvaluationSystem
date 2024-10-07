@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "account_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +26,10 @@ public class User {
     String password;
 
     @Builder.Default
-    Boolean isActive = false;
+    Boolean isActivate = false;
 
-    @Enumerated(EnumType.STRING)  // Save name of enum in database. EnumType.ORDINAL will save index
-    private UserRole role;
+    @Enumerated(EnumType.STRING) @Builder.Default // Save name of enum in database. EnumType.ORDINAL will save index
+    UserRole role = UserRole.CUSTOMER;
 
     @CreationTimestamp
     LocalDate createdDate;

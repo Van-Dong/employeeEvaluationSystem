@@ -1,7 +1,8 @@
 package com.dongnv.employee_evaluation_system.service;
 
 import com.dongnv.employee_evaluation_system.dto.mapper.UserMapper;
-import com.dongnv.employee_evaluation_system.dto.request.UserDTO;
+import com.dongnv.employee_evaluation_system.dto.request.UserCreationRequest;
+import com.dongnv.employee_evaluation_system.dto.response.UserResponse;
 import com.dongnv.employee_evaluation_system.exception.AppException;
 import com.dongnv.employee_evaluation_system.exception.ErrorCode;
 import com.dongnv.employee_evaluation_system.model.User;
@@ -25,32 +26,34 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
 
-    public Page<User> getUserByPage(Integer page) {
+    public Page<UserResponse> getUserByPage(Integer page) {
         return userRepository.findAll(PageRequest.of(page, 10,
-                Sort.by(Sort.Order.desc("createdDate"))));
+                Sort.by(Sort.Order.desc("createdDate")))).map(userMapper::toUserResponse);
     }
 
     // register, have exception if duplicate username -> need handle
-    public void createUser(UserDTO userDTO) {
-        User user = userMapper.toUser(userDTO);
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    public void createUser(UserCreationRequest userCreationRequest) {
+        User user = User.builder().username(userCreationRequest.getUsername()).build();
+        user.setPassword(passwordEncoder.encode(userCreationRequest.getPassword()));
         userRepository.save(user);
     }
 
-    public void activeUser(Long id) {
+    public void activateUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        if (!user.getIsActive()) {
-            user.setIsActive(true);
+        if (!user.getIsActivate()) {
+            log.info("Activate user in service");
+            user.setIsActivate(true);
+            userRepository.save(user);
         }
-        userRepository.save(user);
     }
 
-    public void deactiveUser(Long id) {
+    public void deactivateUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        if (user.getIsActive()) {
-            user.setIsActive(false);
+        if (user.getIsActivate()) {
+            log.info("DEActivate user in service");
+            user.setIsActivate(false);
+            userRepository.save(user);
         }
-        userRepository.save(user);
     }
 
     // By Admin

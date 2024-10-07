@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layouts/base :: head('Login')}">
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div class="my-4 px-3 mx-auto d-flex align-items-center" style="min-height: 80vh; max-width: 800px;">
+  <section class="vh-100">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">　
+          <div class="card text-black" style="border-radius: 25px;">
+            <div class="card-body p-md-5">
+              <div class="row justify-content-center">
+
+                  <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login</p>
+
+                   <form class="mx-1 mx-md-4" action="#" th:action="@{/user/login}">
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                        <label class="form-label" for="form3Example1c">Username:</label>
+                        <input type="text" id="form3Example1c" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div class="d-flex flex-row align-items-center mb-4">
+                      <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                        <label class="form-label" for="password">Password:</label>
+                        <input type="password" id="password" name="password" class="form-control" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <p>Don't have an account ? <a th:href="@{/user/register}">Register</a></p>
+                    </div>
+
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                      <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Login</button>
+                    </div>
+
+                  </form>
+
+              </div>
+            </div>
+          </div>　
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer th:replace="~{layouts/base :: footer}"></footer>
+<div th:replace="~{layouts/base :: toast}"></div>
+<script th:inline="javascript">
+  let message = /*[[${message}]]*/ '';
+
+  if (message !== '' && message !== null) {
+     createToast("info", message);
+  }
+</script>
+</body>
+</html>

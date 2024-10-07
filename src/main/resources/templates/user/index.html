@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/base :: head('User Manager')}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:replace="~{layouts/base :: header}"></header>
+
+<!--  Content  -->
+<div class="my-4 px-3" style="min-height: 80vh">
+    <div th:if="${message}" class="alert alert-warning">
+        <p th:text="${message}"></p>
+    </div>
+    <div>
+        <h2>List user</h2>
+    </div>
+    <button th:unless="${all}" type="button" class="btn btn-primary btn-create_user"
+            data-bs-toggle="modal" data-bs-target="#create_user_modal"
+    >New Evaluation</button>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Date join</th>
+            <th scope="col">Role</th>
+            <th scope="col">Active</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user,iterStat : ${userPage.content}">
+            <th scope="row" th:text="${iterStat.count}">1</th>
+            <td th:text="${user.username}">Nguyen Van Dong</td>
+            <td th:text="${user.createdDate}">01/01/1970</td>
+            <td th:text="${user.role}">Be Late</td>
+            <td th:text="${user.isActivate}"></td>
+            <td>
+                <button type="button"
+                        th:data-id="${user.id}"
+                        class="btn btn-primary btn-set-password"
+                        data-bs-toggle="modal" data-bs-target="#set_password_modal">
+                    Set password
+                </button>
+                <button type="button" class="btn btn-danger btn-activate-user" th:disabled="${user.isActivate}" th:data-id="${user.id}">Activate</button>
+                <button type="button" class="btn btn-danger btn-deactivate-user" th:disabled="${user.isActivate == null || !user.isActivate}"
+                        th:data-id="${user.id}">Deactivate</button>
+                <button th:onclick="|deleteUserById(${user.id})|" type="button" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:class="${userPage.hasPrevious() ? '' : 'disabled'}">
+                <a class="page-link" th:href="@{/user(page=${userPage.number - 1})}" th:if="${userPage.hasPrevious()}">Trang trước</a>
+            </li>
+
+            <li class="page-item" th:if="${userPage.totalPages > 0}" th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}"
+                th:class="${i == userPage.number ? 'active' : ''}">
+                <a class="page-link" th:href="@{/user(page=${i})}" th:text="${i + 1}"></a>
+            </li>
+
+            <li class="page-item" th:class="${userPage.hasNext() ? '' : 'disabled'}">
+                <a class="page-link" th:href="@{/user(page=${userPage.number + 1})}" th:if="${userPage.hasNext()}">Trang tiếp theo</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<footer th:replace="~{layouts/base :: footer}"></footer>
+<div th:replace="~{layouts/base :: toast}"></div>
+
+<!--Modals-->
+<div th:replace="~{modal/modals :: set_password}"></div>
+<div th:replace="~{modal/modals :: create_user}"></div>
+
+<script th:inline="javascript">
+
+    // Delete user
+    function deleteUserById(id) {
+        let deleteUrl = "[(@{/user/delete/})]" +id
+        window.confirm("Are you sure want to delete this user") &&
+        fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    return response.json().then(error => {
+                        throw new Error(error.message || 'Failed to delete the user.');
+                    });
+                }})
+            .catch (error => {
+                console.error("Error: ", error)
+                alert('An error occurred: ' + error.message);
+            });
+    }
+
+    $(document).ready(function(){
+        // Logic
+
+        // Activate user
+        $(".btn-activate-user").click(function (e) {
+            let userId = $(this).data("id");
+            let url = "[(@{/user/activate/})]" + userId;
+            $.ajax({
+                url:  url,
+                type: "POST",
+                success: function (response) {
+                    createToast("info", "Activate user success!")
+                    setTimeout(() => window.location.reload(), 2000)
+                },
+                error: function (error) {
+                    createToast("error", "Activate user failed!")
+                }
+            })
+        })
+
+        // Deactivate user
+        $(".btn-deactivate-user").click(function (e) {
+            let userId = $(this).data("id");
+            let url = "[(@{/user/deactivate/})]" + userId;
+            $.ajax({
+                url:  url,
+                type: "POST",
+                success: function (response) {
+                    createToast("info", "Deactivate user success!")
+                    setTimeout(() => window.location.reload(), 2000)
+                },
+                error: function (error) {
+                    createToast("danger", "Deactivate user failed!")
+                }
+            })
+        })
+
+        // Set id user for form
+        $(".btn-set-password").click(function () {
+            let userId = $(this).data("id");
+            $("#btn_submit_set_password").val(userId);
+        })
+
+        // Set new password
+        $("#set_password_form").submit(function (e) {
+            e.preventDefault();
+            let userId =  $("#btn_submit_set_password").val()
+
+            let form = $(this)
+            let formData = $(this).serialize()
+
+            let setPasswordUrl = "[(@{/user/set-password/})]" + userId;
+            $.ajax({
+                url:  setPasswordUrl,
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    createToast("info", "Set password for user success!")
+                    form.trigger('reset')
+                    setTimeout(() => window.location.reload(), 2000)
+                },
+                error: function (error) {
+                    createToast("danger", error.responseText)
+                    console.log("Error when set password", error);
+                },
+            })
+        })
+
+        // Create user
+        $("#create_user_form").submit(function (e) {
+            e.preventDefault();
+            let form = $(this)
+            let formData = $(this).serialize()
+
+            let createUserUrl = "[(@{/user/create})]";
+            $.ajax({
+                url:  createUserUrl,
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    createToast("info", "Create user successfully!")
+                    console.log("Success create user!", response)
+                    form.trigger('reset')
+                },
+                error: function (error) {
+                    createToast("danger", "Error: " + error.responseText);
+                    console.log("Error submitting create form", error);
+                }
+            })
+        })
+    });
+</script>
+</body>
+</html>
