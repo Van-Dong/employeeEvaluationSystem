@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/base :: head('Home')}">
+<head th:replace="~{layouts/base :: head(#{page.home})}">
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
@@ -9,15 +9,15 @@
 
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
-  <h2>Top 10 best employees</h2>
+  <h2 th:text="#{home.title}">Top 10 best employees</h2>
   <table class="table">
     <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">FullName</th>
-      <th scope="col">Image</th>
-      <th scope="col">Score</th>
-      <th scope="col">Department</th>
+      <th scope="col" th:text="#{home.table.fullName}">FullName</th>
+      <th scope="col" th:text="#{home.table.image}">Image</th>
+      <th scope="col" th:text="#{home.table.score}">Score</th>
+      <th scope="col" th:text="#{home.table.department}">Department</th>
       <th scope="col"></th>
 
     </tr>
@@ -31,7 +31,7 @@
       <td th:text="${(employeeScore.employee != null and employeeScore.employee.department != null) ? (employeeScore.employee.department.code + ' - ' + employeeScore.employee.department.name) : ''}">HR001</td>
 
       <td>
-        <a th:href="@{/evaluation/{employeeid}(employeeid=*{id})}" class="btn btn-success">Detail</a>
+        <a th:href="@{/evaluation/{employeeid}(employeeid=*{id})}" class="btn btn-success" th:text="#{button.detail}">Detail</a>
       </td>
     </tr>
     </tbody>

@@ -36,11 +36,11 @@ public class UserController {
         return "user/index";
     }
 
-    @GetMapping("/register")
-    String register(Model model) {
-        model.addAttribute("userCreationRequest", new UserCreationRequest());
-        return "user/register";
-    }
+//    @GetMapping("/register")
+//    String register(Model model) {
+//        model.addAttribute("userCreationRequest", new UserCreationRequest());
+//        return "user/register";
+//    }
 
     @GetMapping("/login")
     String login() {

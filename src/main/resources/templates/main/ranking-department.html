@@ -39,7 +39,7 @@
   <nav aria-label="Page navigation">
     <ul class="pagination">
       <li class="page-item" th:class="${departmentScorePage.hasPrevious() ? '' : 'disabled'}">
-        <a class="page-link" th:href="@{/ranking(page=${departmentScorePage.number - 1})}" th:if="${departmentScorePage.hasPrevious()}">Trang trước</a>
+        <a class="page-link" th:href="@{/ranking(page=${departmentScorePage.number - 1})}" th:if="${departmentScorePage.hasPrevious()}" th:text="#{pagination.previous}">Trang trước</a>
       </li>
 
       <li class="page-item" th:if="${departmentScorePage.totalPages > 0}" th:each="i : ${#numbers.sequence(0, departmentScorePage.totalPages - 1)}" th:class="${i == departmentScorePage.number ? 'active' : ''}">
@@ -47,7 +47,7 @@
       </li>
 
       <li class="page-item" th:class="${departmentScorePage.hasNext() ? '' : 'disabled'}">
-        <a class="page-link" th:href="@{/ranking(page=${departmentScorePage.number + 1})}" th:if="${departmentScorePage.hasNext()}">Trang tiếp theo</a>
+        <a class="page-link" th:href="@{/ranking(page=${departmentScorePage.number + 1})}" th:if="${departmentScorePage.hasNext()}" th:text="#{pagination.next}">Trang tiếp theo</a>
       </li>
     </ul>
   </nav>

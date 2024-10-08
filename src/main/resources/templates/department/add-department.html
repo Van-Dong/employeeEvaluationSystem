@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/base :: head('Department Manager')}">
+<head th:replace="~{layouts/base :: head(#{page.department})}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -10,20 +10,21 @@
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
     <form action="#" th:action="@{/department/save}" th:object="${departmentDTO}" method="post">
+        <h3 class="mb-3" th:text="#{department.create.title}">Create New Department</h3>
         <div class="form-group">
-            <label for="code">Department Code</label>
-            <input type="text" th:field="*{code}" class="form-control" id="code" aria-describedby="emailHelp" placeholder="Enter Code">
+            <label for="code" class="mb-1" th:text="#{department.form.code}">Department Code</label>
+            <input type="text" th:field="*{code}" class="form-control" id="code" th:placeholder="#{department.form.placeholder.code}">
             <p th:if="${#fields.hasErrors('code')}" th:errors="*{code}" class="text-danger">Invalid Code</p>
         </div>
         <div class="form-group">
-            <label for="name">Department Name</label>
-            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Enter name">
+            <label for="name" class="mb-1" th:text="#{department.form.name}">Department Name</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name" th:placeholder="#{department.form.placeholder.name}">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Invalid Name</p>
         </div>
         <div th:if="${errorMessage}">
             <p th:text="${errorMessage}" class="text-danger">An error occurred</p>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary mt-3" th:text="#{button.submit}">Submit</button>
     </form>
 </div>
 

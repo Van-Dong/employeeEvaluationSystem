@@ -12,8 +12,12 @@
     <div th:if="${message}" class="alert alert-warning">
         <p th:text="${message}"></p>
     </div>
-    <h2 th:if="${department}">Department <span th:text="${department.name + ' - ' + department.code}"></span></h2>
-    <a th:href="@{/employee/create}" type="button" class="btn btn-primary">Create New Employee</a>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>List Employee <span th:if="${department}"> In <span th:text="${department.name + ' - ' + department.code}"></span></span></h2>
+        <a th:href="@{/employee/create}" type="button" class="btn btn-primary">New Employee</a>
+    </div>
+
+
     <table class="table">
         <thead>
         <tr>
@@ -60,7 +64,7 @@
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <li class="page-item" th:class="${employeePage.hasPrevious() ? '' : 'disabled'}">
-                <a class="page-link" th:href="@{/employee(page=${employeePage.number - 1})}" th:if="${employeePage.hasPrevious()}">Trang trước</a>
+                <a class="page-link" th:href="@{/employee(page=${employeePage.number - 1})}" th:if="${employeePage.hasPrevious()}" th:text="#{pagination.previous}">Trang trước</a>
             </li>
 
             <li class="page-item" th:if="${employeePage.totalPages > 0}" th:each="i : ${#numbers.sequence(0, employeePage.totalPages - 1)}" th:class="${i == employeePage.number ? 'active' : ''}">
@@ -68,7 +72,7 @@
             </li>
 
             <li class="page-item" th:class="${employeePage.hasNext() ? '' : 'disabled'}">
-                <a class="page-link" th:href="@{/employee(page=${employeePage.number + 1})}" th:if="${employeePage.hasNext()}">Trang tiếp theo</a>
+                <a class="page-link" th:href="@{/employee(page=${employeePage.number + 1})}" th:if="${employeePage.hasNext()}" th:text="#{pagination.next}">Trang tiếp theo</a>
             </li>
         </ul>
     </nav>

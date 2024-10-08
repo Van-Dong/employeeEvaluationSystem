@@ -12,12 +12,12 @@
     <div th:if="${message}" class="alert alert-warning">
         <p th:text="${message}"></p>
     </div>
-    <div>
-        <h2>List user</h2>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>List Account</h2>
+        <button th:unless="${all}" type="button" class="btn btn-primary btn-create_user"
+                data-bs-toggle="modal" data-bs-target="#create_user_modal"
+        >New User</button>
     </div>
-    <button th:unless="${all}" type="button" class="btn btn-primary btn-create_user"
-            data-bs-toggle="modal" data-bs-target="#create_user_modal"
-    >New User</button>
     <table class="table">
         <thead>
         <tr>

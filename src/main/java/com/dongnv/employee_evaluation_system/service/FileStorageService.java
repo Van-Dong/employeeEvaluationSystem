@@ -16,6 +16,7 @@ import java.util.Date;
 public class FileStorageService {
     private final String uploadDir = "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/";
     private final String uploadImageDir = "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/images/";
+//    private final String uploadDir = "C:/Users/HELLO/Documents/Assignment/Day-2/employeeEvaluationSystem/upload_images/";
 //private final String uploadImageDir = "C:/Users/HELLO/Documents/Assignment/Day-2/employeeEvaluationSystem/upload_images/images/";
 
     public String storeFile(MultipartFile file) throws IOException {
