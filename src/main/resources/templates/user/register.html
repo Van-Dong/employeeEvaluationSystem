@@ -16,7 +16,7 @@
               <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Register</p>
 
               <!-- Form register-->
-              <form class="mx-1 mx-md-4" id="register_form" action="#" th:action="@{/user/register}" method="post" th:object="${userDTO}">
+              <form class="mx-1 mx-md-4" id="register_form" action="#" th:action="@{/user/register}" method="post" th:object="${userCreationRequest}">
 
                 <div class="d-flex flex-row align-items-center mb-4">
                   <div data-mdb-input-init class="form-outline flex-fill mb-0">

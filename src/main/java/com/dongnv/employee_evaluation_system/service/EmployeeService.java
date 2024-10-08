@@ -36,6 +36,10 @@ public class EmployeeService {
         return employeeRepository.findAll(PageRequest.of(page, 10));
     }
 
+    public Page<Employee> getEmployeesByDepartmentId(Integer departmentId, Integer page) {
+        return employeeRepository.findByDepartmentId(departmentId, PageRequest.of(page, 10));
+    }
+
     public EmployeeDTO getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         EmployeeDTO employeeDTO = employeeMapper.toEmployeeDTO(employee);
@@ -85,6 +89,9 @@ public class EmployeeService {
         if (!(employeeDTO.getImageFile() == null || employeeDTO.getImageFile().isEmpty())) {
             try {
                 String imageUrl = fileStorageService.storeFile(employeeDTO.getImageFile());
+                if (employee.getImageUrl() != null) {
+                    fileStorageService.deleteFile(employee.getImageUrl());
+                }
                 employee.setImageUrl(imageUrl);
             } catch (IOException e) {
                 throw new AppException(ErrorCode.ERROR_WHEN_STORE_IMAGE);

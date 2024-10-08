@@ -12,6 +12,7 @@
     <div th:if="${message}" class="alert alert-warning">
         <p th:text="${message}"></p>
     </div>
+    <h2 th:if="${department}">Department <span th:text="${department.name + ' - ' + department.code}"></span></h2>
     <a th:href="@{/employee/create}" type="button" class="btn btn-primary">Create New Employee</a>
     <table class="table">
         <thead>

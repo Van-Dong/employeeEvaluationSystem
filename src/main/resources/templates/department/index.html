@@ -28,7 +28,7 @@
                 <th scope="row" th:text="${iterStat.count}">1</th>
                 <td th:text="${department.code}">HR001</td>
                 <td th:text="${department.name}">Human Resource</td>
-                <td th:text="${department.countEmployee}">40</td>
+                <td><a th:href="@{/employee/department/{id}(id=${department.id})}" th:text="${department.countEmployee}">0</a></td>
                 <td>
                     <a th:href="@{/department/edit/{id}(id=${department.id})}" type="button" class="btn btn-primary">Update</a>
                     <button th:onclick="|deleteDepartmentById(${department.id})|" type="button" class="btn btn-danger">Delete</button>

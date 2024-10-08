@@ -15,6 +15,7 @@
   <div th:if="${employee}" th:object="${employee}">
     <h2>Evaluation for: <span th:text="|*{fullName} - ID *{id}|"></span></h2>
   </div>
+  <h2 th:if="${all}">Recent Evaluation</h2>
   <button th:unless="${all}" type="button" class="btn btn-primary btn-add-evaluation"
      data-bs-toggle="modal" data-bs-target="#create_evaluation_modal" th:data-employeeid="${employee.id}"
   >New Evaluation</button>

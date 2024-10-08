@@ -1,12 +1,11 @@
 package com.dongnv.employee_evaluation_system.controller;
 
 import com.dongnv.employee_evaluation_system.dto.request.SetPasswordRequest;
+import com.dongnv.employee_evaluation_system.dto.request.SetRoleRequest;
 import com.dongnv.employee_evaluation_system.dto.request.UserCreationRequest;
 import com.dongnv.employee_evaluation_system.dto.response.UserResponse;
 import com.dongnv.employee_evaluation_system.service.UserService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid; 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,17 +38,26 @@ public class UserController {
 
     @GetMapping("/register")
     String register(Model model) {
-        model.addAttribute("userDTO", new UserCreationRequest());
+        model.addAttribute("userCreationRequest", new UserCreationRequest());
         return "user/register";
     }
 
     @GetMapping("/login")
     String login() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            return "redirect:/";
+        }
         return "user/login";
     }
 
     @PostMapping("/register")
     String register(@Valid UserCreationRequest userCreationRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("REGISTER TO CREATE USER");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            return "redirect:/";
+        }
         if (bindingResult.hasErrors()) {
             return "user/register";
         }
@@ -60,6 +70,23 @@ public class UserController {
         }
         redirectAttributes.addFlashAttribute("message", "Register successfully!");
         return "redirect:/user/login";
+    }
+
+    @PostMapping("/create")
+    @ResponseBody
+    ResponseEntity<String> create(@Valid UserCreationRequest userCreationRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder error = new StringBuilder();
+            if (bindingResult.hasFieldErrors("username")) error.append(bindingResult.getFieldError("username").getDefaultMessage()).append("\n");
+            if (bindingResult.hasFieldErrors("password")) error.append(bindingResult.getFieldError("password").getDefaultMessage());
+            return ResponseEntity.badRequest().body(error.toString());
+        }
+        try {
+            userService.createUser(userCreationRequest);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+        return ResponseEntity.ok().body("User created successfully!");
     }
 
     @PostMapping("/activate/{id}")
@@ -89,6 +116,19 @@ public class UserController {
         }
         log.info("SET PASSWORD: {}", request.getNew_password());
         userService.setNewPassword(id, request.getNew_password());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/set-role/{id}")
+    @ResponseBody
+    ResponseEntity<String> setRole(@PathVariable Long id,
+                                       @Valid SetRoleRequest request,
+                                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldError("role").getDefaultMessage();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+        userService.setNewRole(id, request);
         return ResponseEntity.ok().build();
     }
 

@@ -15,12 +15,12 @@
 
                   <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Login</p>
 
-                   <form class="mx-1 mx-md-4" action="#" th:action="@{/user/login}">
+                   <form class="mx-1 mx-md-4" action="#" th:action="@{/login}" method="post">
 
                     <div class="d-flex flex-row align-items-center mb-4">
                       <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                        <label class="form-label" for="form3Example1c">Username:</label>
-                        <input type="text" id="form3Example1c" class="form-control" />
+                        <label class="form-label" for="username">Username:</label>
+                        <input type="text" id="username" name="username" class="form-control" />
                       </div>
                     </div>
 
@@ -30,13 +30,22 @@
                         <input type="password" id="password" name="password" class="form-control" />
                       </div>
                     </div>
+                       <div class="d-flex flex-row align-items-center mb-4">
+                           <div th:if="${param.error}">
+                               <p class="text-danger">Invalid username or password!</p>
+                           </div>
+                           <div th:if="${param.inactive}">
+                               <p class="text-danger">Your account is disabled!</p>
+                           </div>
+                       </div>
+
 
                     <div>
                       <p>Don't have an account ? <a th:href="@{/user/register}">Register</a></p>
                     </div>
 
                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                      <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Login</button>
+                      <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Login</button>
                     </div>
 
                   </form>

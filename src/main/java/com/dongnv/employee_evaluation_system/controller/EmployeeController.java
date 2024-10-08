@@ -1,5 +1,6 @@
 package com.dongnv.employee_evaluation_system.controller;
 
+import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
 import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.model.Employee;
@@ -37,6 +38,16 @@ public class EmployeeController {
         if (page < 0) page = 0;
         Page<Employee> employeePage = employeeService.getEmployeesByPage(page);
         model.addAttribute("employeePage", employeePage);
+        return "employee/index";
+    }
+
+    @GetMapping("/department/{departmentId}")
+    String getEmployeeByDepartmentId(@PathVariable Integer departmentId, @RequestParam(defaultValue = "0") Integer page, Model model) {
+        if (page < 0) page = 0;
+        DepartmentDTO department = departmentService.getDepartmentById(departmentId);
+        Page<Employee> employeePage = employeeService.getEmployeesByDepartmentId(departmentId, page);
+        model.addAttribute("employeePage", employeePage);
+        model.addAttribute("department", department);
         return "employee/index";
     }
 

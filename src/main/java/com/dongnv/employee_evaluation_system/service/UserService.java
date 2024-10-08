@@ -1,6 +1,8 @@
 package com.dongnv.employee_evaluation_system.service;
 
+import com.dongnv.employee_evaluation_system.constant.UserRole;
 import com.dongnv.employee_evaluation_system.dto.mapper.UserMapper;
+import com.dongnv.employee_evaluation_system.dto.request.SetRoleRequest;
 import com.dongnv.employee_evaluation_system.dto.request.UserCreationRequest;
 import com.dongnv.employee_evaluation_system.dto.response.UserResponse;
 import com.dongnv.employee_evaluation_system.exception.AppException;
@@ -60,6 +62,13 @@ public class UserService {
     public void setNewPassword(Long id, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    // Set Role by Admin
+    public void setNewRole(Long id, SetRoleRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        user.setRole(UserRole.valueOf(request.getRole()));
         userRepository.save(user);
     }
 

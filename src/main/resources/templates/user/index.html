@@ -17,7 +17,7 @@
     </div>
     <button th:unless="${all}" type="button" class="btn btn-primary btn-create_user"
             data-bs-toggle="modal" data-bs-target="#create_user_modal"
-    >New Evaluation</button>
+    >New User</button>
     <table class="table">
         <thead>
         <tr>
@@ -32,9 +32,10 @@
         <tbody>
         <tr th:each="user,iterStat : ${userPage.content}">
             <th scope="row" th:text="${iterStat.count}">1</th>
-            <td th:text="${user.username}">Nguyen Van Dong</td>
+            <td th:text="${user.username}">Dongnv</td>
             <td th:text="${user.createdDate}">01/01/1970</td>
-            <td th:text="${user.role}">Be Late</td>
+            <td><span th:text="${user.role}"></span>
+                <button data-bs-toggle="modal" data-bs-target="#set_role_modal" class="btn-set-role" th:data-id="${user.id}">✎</button></td>
             <td th:text="${user.isActivate}"></td>
             <td>
                 <button type="button"
@@ -76,6 +77,7 @@
 <!--Modals-->
 <div th:replace="~{modal/modals :: set_password}"></div>
 <div th:replace="~{modal/modals :: create_user}"></div>
+<div th:replace="~{modal/modals :: set_role}"></div>
 
 <script th:inline="javascript">
 
@@ -146,6 +148,12 @@
             $("#btn_submit_set_password").val(userId);
         })
 
+        // set id user for form set role
+        $(".btn-set-role").click(function () {
+            let userId = $(this).data("id");
+            $("#btn_submit_set_role").val(userId);
+        })
+
         // Set new password
         $("#set_password_form").submit(function (e) {
             e.preventDefault();
@@ -171,6 +179,31 @@
             })
         })
 
+        // Set new Role
+        $("#set_role_form").submit(function (e) {
+            e.preventDefault();
+            let userId =  $("#btn_submit_set_role").val()
+
+            let form = $(this)
+            let formData = $(this).serialize()
+
+            let setRoleUrl = "[(@{/user/set-role/})]" + userId;
+            $.ajax({
+                url:  setRoleUrl,
+                type: "POST",
+                data: formData,
+                success: function (response) {
+                    createToast("info", "Set role for user success!")
+                    form.trigger('reset')
+                    setTimeout(() => window.location.reload(), 2000)
+                },
+                error: function (error) {
+                    createToast("danger", error.responseText)
+                    console.log("Error when set role", error);
+                },
+            })
+        })
+
         // Create user
         $("#create_user_form").submit(function (e) {
             e.preventDefault();
@@ -186,6 +219,7 @@
                     createToast("info", "Create user successfully!")
                     console.log("Success create user!", response)
                     form.trigger('reset')
+                    setTimeout(() => window.location.reload(), 2000);
                 },
                 error: function (error) {
                     createToast("danger", "Error: " + error.responseText);
