@@ -25,9 +25,6 @@ public class User {
     String username;
     String password;
 
-    @Builder.Default
-    Boolean isActivate = false;
-
     @Enumerated(EnumType.STRING) @Builder.Default // Save name of enum in database. EnumType.ORDINAL will save index
     UserRole role = UserRole.CUSTOMER;
 

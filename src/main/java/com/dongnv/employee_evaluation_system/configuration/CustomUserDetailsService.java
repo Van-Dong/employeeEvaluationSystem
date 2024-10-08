@@ -21,11 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("User not found with username: " + username)
-        );
-
-        if (!user.getIsActivate()) {
-            throw new DisabledException("User is not activated");
-        }
+        ); 
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())

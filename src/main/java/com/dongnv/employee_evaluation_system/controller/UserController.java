@@ -89,22 +89,6 @@ public class UserController {
         return ResponseEntity.ok().body("User created successfully!");
     }
 
-    @PostMapping("/activate/{id}")
-    @ResponseBody
-    ResponseEntity<Void> activateUser(@PathVariable Long id) {
-        log.info("ACTIVATE USER");
-        userService.activateUser(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/deactivate/{id}")
-    @ResponseBody
-    ResponseEntity<Void> deactivateUser(@PathVariable Long id) {
-        log.info("DEACTIVATE USER");
-        userService.deactivateUser(id);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/set-password/{id}")
     @ResponseBody
     ResponseEntity<String> setPassword(@PathVariable Long id,

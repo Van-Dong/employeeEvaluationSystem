@@ -40,24 +40,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void activateUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        if (!user.getIsActivate()) {
-            log.info("Activate user in service");
-            user.setIsActivate(true);
-            userRepository.save(user);
-        }
-    }
-
-    public void deactivateUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        if (user.getIsActivate()) {
-            log.info("DEActivate user in service");
-            user.setIsActivate(false);
-            userRepository.save(user);
-        }
-    }
-
     // By Admin
     public void setNewPassword(Long id, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));

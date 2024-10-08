@@ -25,7 +25,6 @@
             <th scope="col">Username</th>
             <th scope="col">Date join</th>
             <th scope="col">Role</th>
-            <th scope="col">Active</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -35,8 +34,7 @@
             <td th:text="${user.username}">Dongnv</td>
             <td th:text="${user.createdDate}">01/01/1970</td>
             <td><span th:text="${user.role}"></span>
-                <button data-bs-toggle="modal" data-bs-target="#set_role_modal" class="btn-set-role" th:data-id="${user.id}">✎</button></td>
-            <td th:text="${user.isActivate}"></td>
+                <button data-bs-toggle="modal" data-bs-target="#set_role_modal" class="btn-set-role" th:data-id="${user.id}">✎</button></td>　
             <td>
                 <button type="button"
                         th:data-id="${user.id}"
@@ -44,9 +42,6 @@
                         data-bs-toggle="modal" data-bs-target="#set_password_modal">
                     Set password
                 </button>
-                <button type="button" class="btn btn-danger btn-activate-user" th:disabled="${user.isActivate}" th:data-id="${user.id}">Activate</button>
-                <button type="button" class="btn btn-danger btn-deactivate-user" th:disabled="${user.isActivate == null || !user.isActivate}"
-                        th:data-id="${user.id}">Deactivate</button>
                 <button th:onclick="|deleteUserById(${user.id})|" type="button" class="btn btn-danger">Delete</button>
             </td>
         </tr>
@@ -107,40 +102,6 @@
 
     $(document).ready(function(){
         // Logic
-
-        // Activate user
-        $(".btn-activate-user").click(function (e) {
-            let userId = $(this).data("id");
-            let url = "[(@{/user/activate/})]" + userId;
-            $.ajax({
-                url:  url,
-                type: "POST",
-                success: function (response) {
-                    createToast("info", "Activate user success!")
-                    setTimeout(() => window.location.reload(), 2000)
-                },
-                error: function (error) {
-                    createToast("error", "Activate user failed!")
-                }
-            })
-        })
-
-        // Deactivate user
-        $(".btn-deactivate-user").click(function (e) {
-            let userId = $(this).data("id");
-            let url = "[(@{/user/deactivate/})]" + userId;
-            $.ajax({
-                url:  url,
-                type: "POST",
-                success: function (response) {
-                    createToast("info", "Deactivate user success!")
-                    setTimeout(() => window.location.reload(), 2000)
-                },
-                error: function (error) {
-                    createToast("danger", "Deactivate user failed!")
-                }
-            })
-        })
 
         // Set id user for form
         $(".btn-set-password").click(function () {

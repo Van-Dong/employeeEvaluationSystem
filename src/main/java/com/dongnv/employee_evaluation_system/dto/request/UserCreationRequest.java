@@ -24,7 +24,7 @@ public class UserCreationRequest {
     @Size(min = 5, message = "Password must be at least 5 character")
     String password;
 
-    Boolean isActive;
+//    Boolean isActive;
 
     LocalDate createdDate;
 }

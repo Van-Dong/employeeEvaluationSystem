@@ -10,9 +10,5 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
     User toUser(UserCreationRequest userCreationRequest);
 
-//    @Mapping(target = "id", ignore = true)
-//    @Mapping(target = "username", ignore = true)
-//    void updatedUser(@MappingTarget User user, UserDTO userDTO);
-
     UserResponse toUserResponse(User user);
 }
