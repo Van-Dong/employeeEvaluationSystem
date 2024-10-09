@@ -10,18 +10,23 @@
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
   <div class="d-flex justify-content-between">
-    <h2>Ranking Department</h2>
-    <a href="/ranking/employee" th:href="@{/ranking/employee}">Ranking Employee</a>
+    <div class="d-flex">
+      <h2 th:text="#{ranking.department.title}">Ranking Department</h2>
+      <form action="#" th:action="@{/ranking}" method="get">
+        <input class="form-control ms-2" type="text" name="searchName" th:placeholder="#{search.placeholder}"/>
+      </form>
+    </div>
+    <a href="/ranking/employee" th:href="@{/ranking/employee}" th:text="#{ranking.employee.title}">Ranking Employee</a>
   </div>
-  <table class="table">
+  <table class="table table-bordered text-center mt-4">
     <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Code</th>
-      <th scope="col">Name</th>
-      <th scope="col">Discipline</th>
-      <th scope="col">Rewards</th>
-      <th scope="col">Score</th>
+      <th scope="col" th:text="#{ranking.department.code}">Code</th>
+      <th scope="col" th:text="#{ranking.department.name}">Name</th>
+      <th scope="col" th:text="#{ranking.discipline}">Discipline</th>
+      <th scope="col" th:text="#{ranking.reward}">Rewards</th>
+      <th scope="col" th:text="#{ranking.score}">Score</th>
 
     </tr>
     </thead>

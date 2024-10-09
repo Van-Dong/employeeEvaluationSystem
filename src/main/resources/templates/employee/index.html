@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layouts/base :: head('Employee Manager')}">
+<head th:replace="~{layouts/base :: head(#{page.employee})}">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -13,34 +13,43 @@
         <p th:text="${message}"></p>
     </div>
     <div class="d-flex justify-content-between align-items-center">
-        <h2>List Employee <span th:if="${department}"> In <span th:text="${department.name + ' - ' + department.code}"></span></span></h2>
-        <a th:href="@{/employee/create}" type="button" class="btn btn-primary">New Employee</a>
+
+        <div class="d-flex">
+            <h2>
+                <span th:text="#{employee.title}">List Employee</span>
+                <span th:if="${department}"> <span th:text="#{employee.title.in.department(${department.name}, ${department.code})}"></span></span>
+            </h2>
+            <form th:unless="${department}" action="#" th:action="@{/employee}" method="get">
+                <input class="form-control ms-2" type="text" name="searchName" th:placeholder="#{search.placeholder}"/>
+            </form>
+        </div>
+        <a th:href="@{/employee/create}" type="button" class="btn btn-primary" th:text="#{employee.create}">New Employee</a>
     </div>
 
 
-    <table class="table">
+    <table class="table table-bordered text-center mt-4">
         <thead>
         <tr>
-            <th scope="col">ID</th>
-            <th scope="col">FullName</th>
-            <th scope="col">Sex</th>
-            <th scope="col">Date of birth</th>
-            <th scope="col">Level</th>
-            <th scope="col">Salary</th>
-            <th scope="col">Department</th>
-            <th scope="col">Profile Image</th>
-            <th scope="col">Email</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Note</th>
-            <th scope="col">Evaluation</th>
-            <th scope="col">Action</th>
+            <th scope="col" th:text="#{employee.id}">ID</th>
+            <th scope="col" th:text="#{employee.fullName}">FullName</th>
+            <th scope="col" th:text="#{employee.sex}">Sex</th>
+            <th scope="col" th:text="#{employee.dob}">Date of birth</th>
+            <th scope="col" th:text="#{employee.id}">Level</th>
+            <th scope="col" th:text="#{employee.salary}">Salary</th>
+            <th scope="col" th:text="#{employee.department}">Department</th>
+            <th scope="col" th:text="#{employee.image}">Profile Image</th>
+            <th scope="col" th:text="#{employee.email}">Email</th>
+            <th scope="col" th:text="#{employee.phone}">Phone</th>
+            <th scope="col" th:text="#{employee.note}">Note</th>
+            <th scope="col" th:text="#{employee.evaluation}">Evaluation</th>
+            <th scope="col" th:text="#{employee.action}">Action</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="employee,iterStat : ${employeePage.content}">
             <td th:text="${employee.id}">1</td>
             <td th:text="${employee.fullName}">Nguyen Van Dong</td>
-            <td th:text="${employee.isMale} ? 'Male' : 'Female'">Men</td>
+            <td th:text="${employee.isMale} ? #{employee.sex.male} : #{employee.sex.female}">Men</td>
             <td th:text="${employee.dob}">14-07-2002</td>
             <td th:text="${employee.level}">1</td>
             <td th:text="${employee.salary}">9000</td>
@@ -50,13 +59,13 @@
             <td th:text="${employee.phone}">099999999</td>
             <td th:text="${employee.note}">....</td>
             <td>
-                <a th:href="@{/evaluation/{employeeid}(employeeid=${employee.id})}" class="btn btn-success">Watch</a>
+                <a th:href="@{/evaluation/{employeeid}(employeeid=${employee.id})}" th:text="#{button.watch}" class="btn btn-success">Watch</a>
                 <button data-bs-toggle="modal" data-bs-target="#create_evaluation_modal" data-th-attr="data-employeeid=${employee.id}"
-                        type="button" class="btn btn-primary btn-add-evaluation">Add</button>
+                        type="button" class="btn btn-primary btn-add-evaluation" th:text="#{button.add}">Add</button>
             </td>
             <td>
-                <a th:href="@{/employee/edit/{id}(id=${employee.id})}" type="button" class="btn btn-primary">Update</a>
-                <button th:onclick="|deleteEmployeeById(${employee.id})|" type="button" class="btn btn-danger">Delete</button>
+                <a th:href="@{/employee/edit/{id}(id=${employee.id})}" type="button" th:text="#{button.update}" class="btn btn-primary">Update</a>
+                <button th:onclick="|deleteEmployeeById(${employee.id})|" type="button" th:text="#{button.delete}" class="btn btn-danger">Delete</button>
             </td>
         </tr>
         </tbody>
@@ -139,7 +148,7 @@
                     form.trigger('reset')
                 },
                 error: function (error) {
-                    createToast("danger", "Create evaluation failed!")
+                    createToast("danger", "Error: " + error.responseText)
                     console.log("Error submitting form", error);
                 }
             })

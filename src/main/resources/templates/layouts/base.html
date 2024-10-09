@@ -48,7 +48,7 @@
 <body>
 <!-- Header -->
 <header th:fragment="header">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+    <nav class="navbar navbar-expand-lg text-bg-info fw-bold shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">ABC Group </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,6 +89,12 @@
                                 <li>
                                     <a class="dropdown-item" href="/?lang=fr"><span th:text="#{lang.fr}">France</span></a>
                                 </li>
+                            <li>
+                                <a class="dropdown-item" href="/?lang=vi"><span th:text="#{lang.vi}">Vietnamese</span></a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/?lang=de"><span th:text="#{lang.de}">German</span></a>
+                            </li>
                         </ul>
                     </div>
                     <div class="nav-item">

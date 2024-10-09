@@ -30,8 +30,9 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    String getUsers(@RequestParam(defaultValue = "0") Integer page, Model model) {
-        Page<UserResponse> userPage = userService.getUserByPage(page);
+    String getUsers(@RequestParam(defaultValue = "0") Integer page,
+                    @RequestParam(defaultValue = "") String searchUsername, Model model) {
+        Page<UserResponse> userPage = userService.getUserByPage(searchUsername, page);
         model.addAttribute("userPage", userPage);
         return "user/index";
     }

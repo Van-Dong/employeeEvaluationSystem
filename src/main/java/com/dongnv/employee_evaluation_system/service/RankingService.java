@@ -1,6 +1,5 @@
 package com.dongnv.employee_evaluation_system.service;
 
-import com.dongnv.employee_evaluation_system.dto.mapper.EmployeeMapper;
 import com.dongnv.employee_evaluation_system.dto.response.DepartmentScore;
 import com.dongnv.employee_evaluation_system.dto.response.EmployeeScore;
 import com.dongnv.employee_evaluation_system.model.Employee;
@@ -24,9 +23,9 @@ public class RankingService {
     EvaluationRepository evaluationRepository;
     EmployeeRepository employeeRepository;
 
-    public Page<EmployeeScore> getEmployeeScore(Integer page) {
+    public Page<EmployeeScore> getEmployeeScore(String searchName, Integer page) {
         // Get score employee order by score
-        Page<EmployeeScore> employeeScorePage = evaluationRepository.personalAchievements(PageRequest.of(page, 10));
+        Page<EmployeeScore> employeeScorePage = evaluationRepository.personalAchievementsByEmployeeName("%" + searchName + "%", PageRequest.of(page, 10));
 
         // Get employees base on IDs
         List<Long> ids = employeeScorePage.stream().map(EmployeeScore::getId).toList();
@@ -40,8 +39,8 @@ public class RankingService {
         return employeeScorePage;
     }
 
-    public Page<DepartmentScore> getDepartmentScore(Integer page) {
+    public Page<DepartmentScore> getDepartmentScore(String searchName, Integer page) {
         // Get score department order by score
-        return evaluationRepository.departmentAchievements(PageRequest.of(page, 10));
+        return evaluationRepository.departmentAchievementsByNameLike("%" + searchName + "%", PageRequest.of(page, 10));
     }
 }

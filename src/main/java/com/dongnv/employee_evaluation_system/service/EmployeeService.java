@@ -28,12 +28,8 @@ public class EmployeeService {
     EmployeeMapper employeeMapper;
     FileStorageService fileStorageService;
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
-    }
-
-    public Page<Employee> getEmployeesByPage(Integer page) {
-        return employeeRepository.findAll(PageRequest.of(page, 10));
+    public Page<Employee> getEmployeesByPage(String searchName, Integer page) {
+        return employeeRepository.findAllByFullNameLike("%" + searchName + "%", PageRequest.of(page, 10));
     }
 
     public Page<Employee> getEmployeesByDepartmentId(Integer departmentId, Integer page) {

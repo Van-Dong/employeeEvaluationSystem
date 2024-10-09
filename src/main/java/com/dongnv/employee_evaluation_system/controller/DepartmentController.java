@@ -26,9 +26,10 @@ public class DepartmentController {
     DepartmentService departmentService;
 
     @GetMapping
-    public String getAllDepartments(@RequestParam(defaultValue = "0") int page, Model model) {
+    public String getAllDepartments(@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "") String searchName, Model model) {
         if (page < 0) page = 0;
-        Page<Department> departmentPage = departmentService.getDepartmentsByPage(page);
+        Page<Department> departmentPage = departmentService.getDepartmentsByPage(page, searchName);
         model.addAttribute("departmentPage", departmentPage);
         return "department/index";
     }

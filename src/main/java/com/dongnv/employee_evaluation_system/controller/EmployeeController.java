@@ -34,9 +34,10 @@ public class EmployeeController {
     DepartmentService departmentService;
 
     @GetMapping
-    String getAllEmployees(@RequestParam(defaultValue = "0") Integer page, Model model) {
+    String getAllEmployees(@RequestParam(defaultValue = "0") Integer page,
+                           @RequestParam(defaultValue = "") String searchName, Model model) {
         if (page < 0) page = 0;
-        Page<Employee> employeePage = employeeService.getEmployeesByPage(page);
+        Page<Employee> employeePage = employeeService.getEmployeesByPage(searchName, page);
         model.addAttribute("employeePage", employeePage);
         return "employee/index";
     }

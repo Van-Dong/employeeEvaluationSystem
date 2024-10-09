@@ -10,18 +10,23 @@
 <!--  Content  -->
 <div class="my-4 px-3" style="min-height: 80vh">
     <div class="d-flex justify-content-between">
-      <h2>Ranking Employee</h2>
-      <a href="/ranking/employee" th:href="@{/ranking}">Ranking Department</a>
+      <div class="d-flex">
+        <h2 th:text="#{ranking.employee.title}">Ranking Employee</h2>
+        <form action="#" th:action="@{/ranking/employee}" method="get">
+          <input class="form-control ms-2" type="text" name="searchName" th:placeholder="#{search.placeholder}"/>
+        </form>
+      </div>
+      <a href="/ranking/employee" th:href="@{/ranking}" th:text="#{ranking.department.title}">Ranking Department</a>
     </div>
-  <table class="table">
+  <table class="table table-bordered text-center mt-4">
     <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">FullName</th>
-      <th scope="col">Reward</th>
-      <th scope="col">Discipline</th>
-      <th scope="col">Score</th>
-      <th scope="col">Department</th>
+      <th scope="col" th:text="#{ranking.employee.fullName}">FullName</th>
+      <th scope="col" th:text="#{ranking.reward}">Reward</th>
+      <th scope="col" th:text="#{ranking.discipline}">Discipline</th>
+      <th scope="col" th:text="#{ranking.score}">Score</th>
+      <th scope="col" th:text="#{ranking.department}">Department</th>
       <th scope="col"></th>
 
     </tr>
@@ -36,7 +41,7 @@
       <td th:text="${(employeeScore.employee != null and employeeScore.employee.department != null) ? (employeeScore.employee.department.code + ' - ' + employeeScore.employee.department.name) : ''}">HR001</td>
 
       <td>
-        <a th:href="@{/evaluation/{employeeid}(employeeid=*{id})}" class="btn btn-success">Detail</a>
+        <a th:href="@{/evaluation/{employeeid}(employeeid=*{id})}" class="btn btn-success" th:text="#{button.detail}">Detail</a>
       </td>
     </tr>
     </tbody>

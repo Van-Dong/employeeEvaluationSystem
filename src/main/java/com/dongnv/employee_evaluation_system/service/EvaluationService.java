@@ -33,11 +33,6 @@ public class EvaluationService {
                 PageRequest.of(page, 10, Sort.by(Sort.Order.desc("evaluationDate"))));
     }
 
-    public EvaluationDTO getEvaluationById(Long id) {
-        Evaluation evaluation = evaluationRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EVALUATION_NOT_FOUND));
-        return evaluationMapper.toEvaluationDTO(evaluation);
-    }
-
     public void createEvaluation(Long employeeId, EvaluationDTO evaluationDTO) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         Evaluation evaluation = evaluationMapper.toEvaluation(evaluationDTO);

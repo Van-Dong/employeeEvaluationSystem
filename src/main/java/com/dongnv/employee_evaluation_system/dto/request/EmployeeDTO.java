@@ -36,6 +36,7 @@ public class EmployeeDTO {
     @Email(message = "Invalid email")
     String email;
     String phone;
+    @Size(max = 255, message = "Note must be max 255 characters")
     String note;
     Integer departmentId;
     String imageUrl;

@@ -20,4 +20,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Page<Employee> findByDepartmentId(@Param("departmentId") Integer departmentId, Pageable pageable);
 
     List<Employee> findAllByIdIn(List<Long> ids);
+
+    Page<Employee> findAllByFullNameLike(String fullName, Pageable pageable);
 }

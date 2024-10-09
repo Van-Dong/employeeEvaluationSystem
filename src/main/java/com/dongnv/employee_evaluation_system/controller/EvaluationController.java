@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -44,7 +45,12 @@ public class EvaluationController {
 
     @PostMapping("/create/{employeeId}")
     @ResponseBody
-    ResponseEntity<Void> createEvaluation(@PathVariable Long employeeId, @Valid EvaluationDTO evaluationDTO) {
+    ResponseEntity<String> createEvaluation(@PathVariable Long employeeId, @Valid EvaluationDTO evaluationDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder error = new StringBuilder();
+            if (bindingResult.hasFieldErrors("reason")) error.append(bindingResult.getFieldError("reason").getDefaultMessage());
+            return ResponseEntity.badRequest().body(error.toString());
+        }
         evaluationService.createEvaluation(employeeId, evaluationDTO);
         return ResponseEntity.ok().build();
     }

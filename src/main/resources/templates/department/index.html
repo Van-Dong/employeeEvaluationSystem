@@ -13,10 +13,15 @@
             <p th:text="${message}"></p>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-            <h2 th:text="#{department.title}">List Department</h2>
+            <div class="d-flex">
+                <h2 th:text="#{department.title}">List Department</h2>
+                <form action="#" th:action="@{/department}" method="get">
+                    <input class="form-control ms-2" type="text" name="searchName" th:placeholder="#{search.placeholder}"/>
+                </form>
+            </div>
             <a th:href="@{/department/create}" type="button" class="btn btn-primary" th:text="#{department.create}">New Department</a>
         </div>
-        <table class="table">
+        <table class="table table-bordered text-center mt-4">
             <thead>
             <tr>
                 <th scope="col">#</th>

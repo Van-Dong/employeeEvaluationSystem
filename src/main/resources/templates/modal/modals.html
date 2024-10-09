@@ -6,23 +6,23 @@
 </head>
 <body>
 
-<!-- Modal create evalutaion -->
+<!-- Modal create evaluation -->
 <div class="modal fade" id="create_evaluation_modal" th:fragment="create_evaluation">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header text-bg-primary">
-                <h4 class="modal-title">Create Evaluation For Employee</h4>
+                <h4 class="modal-title" th:text="#{employee.modalCreateEvaluation.title}">Create Evaluation For Employee</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="post" name="create_evaluation_form" id="create_evaluation_form" novalidate="novalidate">
                 <div class="modal-body">
 
-                    <!-- Discripline or Reward -->
+                    <!-- Discipline or Reward -->
                     <div class="form-group">
                         <div class="icheck-primary d-inline">
                             <input type="checkbox" id="isCommended" name = "isCommended">
-                            <label for="isCommended" class="control-label">
+                            <label for="isCommended" class="control-label" th:text="#{employee.modalCreateEvaluation.isReward}">
                                 Is Reward
                             </label>
                         </div>
@@ -30,27 +30,27 @@
 
                     <!-- Reason -->
                     <div class="form-group">
-                        <label for="reason" class="control-label">Reason</label>
+                        <label for="reason" class="control-label" th:text="#{employee.modalCreateEvaluation.reason}">Reason</label>
                         <input type="text" class="form-control" id="reason" name="reason" value="">
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_create_evaluation">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_create_evaluation" th:text="#{button.submit}">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Modal update evalutaion -->
+<!-- Modal update evaluation -->
 <div class="modal fade" id="update_evaluation_modal" th:fragment="update_evaluation">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header text-bg-primary">
-                <h4 class="modal-title">Create Evaluation For Employee</h4>
+                <h4 class="modal-title" th:text="#{employee.modalUpdateEvaluation.title}">Create Evaluation For Employee</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="post" name="update_evaluation_form" id="update_evaluation_form" novalidate="novalidate">
@@ -60,7 +60,7 @@
                     <div class="form-group">
                         <div class="icheck-primary d-inline">
                             <input type="checkbox" id="isCommended_update" name = "isCommended">
-                            <label for="isCommended_update" class="control-label">
+                            <label for="isCommended_update" class="control-label" th:text="#{employee.modalUpdateEvaluation.isReward}">
                                 Is Reward
                             </label>
                         </div>
@@ -68,14 +68,14 @@
 
                     <!-- Reason -->
                     <div class="form-group">
-                        <label for="reason_update" class="control-label">Reason</label>
+                        <label for="reason_update" class="control-label" th:text="#{employee.modalUpdateEvaluation.reason}">Reason</label>
                         <input type="text" class="form-control" id="reason_update" name="reason" value="">
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_update_evaluation">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_update_evaluation" th:text="#{button.submit}">Submit</button>
                 </div>
             </form>
         </div>
@@ -88,21 +88,21 @@
         <div class="modal-content">
 
             <div class="modal-header text-bg-primary">
-                <h4 class="modal-title">Set New Password</h4>
+                <h4 class="modal-title" th:text="#{account.modalSetPassword.title}">Set New Password</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="post" name="set_password_form" id="set_password_form" novalidate="novalidate">
                 <div class="modal-body">
                     <!-- New password -->
                     <div class="form-group">
-                        <label for="new_password" class="control-label">New Password</label>
+                        <label for="new_password" class="control-label" th:text="#{account.modalSetPassword.password}">New Password</label>
                         <input type="password" class="form-control" id="new_password" name="new_password" minlength="5" required value="">
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_set_password">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_set_password" th:text="#{button.submit}">Submit</button>
                 </div>
             </form>
         </div>
@@ -115,26 +115,26 @@
         <div class="modal-content">
 
             <div class="modal-header text-bg-primary">
-                <h4 class="modal-title">Create User Account</h4>
+                <h4 class="modal-title" th:text="#{account.modalCreateAccount.title}">Create User Account</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="post" name="create_user_form" id="create_user_form" novalidate="novalidate">
                 <div class="modal-body">
                     <!-- Username -->
                     <div class="form-group">
-                        <label for="username" class="control-label">Username</label>
+                        <label for="username" class="control-label" th:text="#{account.modalCreateAccount.username}">Username</label>
                         <input type="text" class="form-control" id="username" name="username" minlength="5" required value="">
                     </div>
                     <!--  Password -->
                     <div class="form-group">
-                        <label for="password" class="control-label">New Password</label>
+                        <label for="password" class="control-label" th:text="#{account.modalCreateAccount.password}">New Password</label>
                         <input type="password" class="form-control" id="password" name="password" minlength="5" required value="">
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_create_user">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_create_user" th:text="#{button.submit}">Submit</button>
                 </div>
             </form>
         </div>
@@ -147,25 +147,25 @@
         <div class="modal-content">
 
             <div class="modal-header text-bg-primary">
-                <h4 class="modal-title">Set Role</h4>
+                <h4 class="modal-title" th:text="#{account.modalSetRole.title}">Set Role</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="post" name="set_role_form" id="set_role_form" novalidate="novalidate">
                 <div class="modal-body">
                     <!-- New role -->
                     <div class="form-group">
-                        <label for="role" class="control-label">Set new role for user</label>
+                        <label for="role" class="control-label" th:text="#{account.modalSetRole.role}">Set new role for user</label>
                         <select class="form-select" id="role" name="role">
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="MANAGER">MANAGER</option>
-                            <option value="CUSTOMER" selected>CUSTOMER</option>
+                            <option value="ADMIN" th:text="#{account.role.admin}">ADMIN</option>
+                            <option value="MANAGER" th:text="#{account.role.manager}">MANAGER</option>
+                            <option value="CUSTOMER" selected th:text="#{account.role.customer}">CUSTOMER</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_set_role">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{button.cancel}">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="btn_submit_set_role" th:text="#{button.submit}">Submit</button>
                 </div>
             </form>
         </div>

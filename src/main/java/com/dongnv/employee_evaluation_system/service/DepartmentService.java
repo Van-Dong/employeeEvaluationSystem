@@ -28,8 +28,8 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public Page<Department> getDepartmentsByPage(int page) {
-        Page<Department> departmentList = departmentRepository.findAll(PageRequest.of(page, 10));
+    public Page<Department> getDepartmentsByPage(int page, String searchName) {
+        Page<Department> departmentList = departmentRepository.findAllByNameLike("%" + searchName + "%", PageRequest.of(page, 10));
         departmentList.getContent().forEach(d -> d.setCountEmployee(employeeRepository.countByDepartmentId(d.getId())));
         return departmentList;
     }

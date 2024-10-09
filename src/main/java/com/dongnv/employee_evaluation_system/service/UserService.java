@@ -28,8 +28,8 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
 
-    public Page<UserResponse> getUserByPage(Integer page) {
-        return userRepository.findAll(PageRequest.of(page, 10,
+    public Page<UserResponse> getUserByPage(String searchUsername, Integer page) {
+        return userRepository.findAllByUsernameLike("%" + searchUsername + "%", PageRequest.of(page, 10,
                 Sort.by(Sort.Order.desc("createdDate")))).map(userMapper::toUserResponse);
     }
 

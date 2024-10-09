@@ -22,23 +22,25 @@ public class HomeController {
 
     @GetMapping
     String getBestEmployee(Model model) {
-        Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore(0);
+        Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore("",0);
         model.addAttribute("employeeScorePage", employeeScorePage);
         return "main/home";
     }
 
     @GetMapping("/ranking/employee")
-    String getRankingEmployee(@RequestParam(defaultValue = "0") Integer page, Model model) {
+    String getRankingEmployee(@RequestParam(defaultValue = "0") Integer page,
+                              @RequestParam(defaultValue = "") String searchName, Model model) {
         if (page < 0) page = 0;
-        Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore(page);
+        Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore(searchName, page);
         model.addAttribute("employeeScorePage", employeeScorePage);
         return "main/ranking-employee";
     }
 
     @GetMapping("/ranking")
-    String getRankingDepartment(@RequestParam(defaultValue = "0") Integer page, Model model) {
+    String getRankingDepartment(@RequestParam(defaultValue = "0") Integer page,
+                                @RequestParam(defaultValue = "") String searchName, Model model) {
         if (page < 0) page = 0;
-        Page<DepartmentScore> departmentScorePage = rankingService.getDepartmentScore(page);
+        Page<DepartmentScore> departmentScorePage = rankingService.getDepartmentScore(searchName, page);
         model.addAttribute("departmentScorePage", departmentScorePage);
         return "main/ranking-department";
     }
