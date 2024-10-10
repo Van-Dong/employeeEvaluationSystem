@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
-@Slf4j
+//@Slf4j
 public class FileStorageService {
     private final String uploadDir = "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/";
     private final String uploadImageDir = "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/images/";

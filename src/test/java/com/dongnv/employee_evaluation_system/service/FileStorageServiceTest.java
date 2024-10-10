@@ -33,8 +33,6 @@ class FileStorageServiceTest {
 
     @BeforeAll
     static void setUp() throws IOException {
-
-
         tempDir = Files.createTempDirectory("testDir");
 
         // For delete file test case
@@ -129,6 +127,16 @@ class FileStorageServiceTest {
 
     @Test
     void deleteFile_hasFile_canNotDelete_fail() {
+//        // GIVEN
+//        mockedPaths.when(() -> Paths.get(anyString())).thenReturn(filePathDeleted);
+//        mockedFiles.when(() -> Files.deleteIfExists(filePathDeleted))
+//                .thenThrow(new IOException("Can't delete file"));
+//
+//        // WHEN
+//        fileStorageService.deleteFile(fileNameDeleted);
+//
+//        // THEN
+//        mockedFiles.verify(() -> Files.deleteIfExists(filePathDeleted), Mockito.times(0));
 
     }
 }
