@@ -40,8 +40,8 @@ public class EvaluationService {
         evaluationRepository.save(evaluation);
     }
 
-    public void updateEvaluation(Long id, EvaluationDTO evaluationDTO) {
-        Evaluation evaluation = evaluationRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EVALUATION_NOT_FOUND));
+    public void updateEvaluation(Long evaluationId, EvaluationDTO evaluationDTO) {
+        Evaluation evaluation = evaluationRepository.findById(evaluationId).orElseThrow(() -> new AppException(ErrorCode.EVALUATION_NOT_FOUND));
         evaluationMapper.updatedEvaluation(evaluation, evaluationDTO);
         evaluationRepository.save(evaluation);
     }

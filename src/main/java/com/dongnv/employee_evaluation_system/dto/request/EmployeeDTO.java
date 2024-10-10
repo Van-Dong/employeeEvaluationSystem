@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @Builder
@@ -25,10 +26,15 @@ public class EmployeeDTO {
     @NotNull
     Boolean isMale;
 
+    @NotNull
     @DobConstraint(min = 18)
     LocalDate dob;
+
+    @NotNull
+    @Min(value = 1000, message = "Salary must be at least 1000")
     Double salary;
 
+    @NotNull
     @Min(value = 1, message = "Level must be between in [1, 10]")
     @Max(value = 10, message = "Level must be between in [1, 10]")
     Byte level;
@@ -43,4 +49,8 @@ public class EmployeeDTO {
 
     @FileConstraint(message = "Type of image not support")
     MultipartFile imageFile;
+
+    public String getFormattedDob() {
+        return dob == null ? "" : dob.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 }

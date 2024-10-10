@@ -3,6 +3,7 @@ package com.dongnv.employee_evaluation_system.service;
 import com.dongnv.employee_evaluation_system.dto.mapper.DepartmentMapper;
 import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
 import com.dongnv.employee_evaluation_system.exception.AppException;
+import com.dongnv.employee_evaluation_system.exception.ErrorCode;
 import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
 import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
+// Only Use Mock
 class DepartmentServiceTest {
     @Mock
     DepartmentRepository departmentRepository;
@@ -73,10 +75,6 @@ class DepartmentServiceTest {
 
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void getAllDepartments() {
         // GIVEN
@@ -113,15 +111,17 @@ class DepartmentServiceTest {
     @Test
     void getDepartmentById_valid_success() {
         // GIVEN
-        Mockito.when(departmentRepository.findById(1)).thenReturn(Optional.of(department1));
+        Integer id = 1;
+        Mockito.when(departmentRepository.findById(id)).thenReturn(Optional.of(department1));
         DepartmentDTO departmentDTO = DepartmentDTO.builder()
                 .id(department1.getId())
                 .code(department1.getCode())
                 .name(department1.getName())
                 .build();
+        Mockito.when(departmentMapper.toDepartmentDTO(department1)).thenReturn(departmentDTO);
 
         // WHEN
-        DepartmentDTO actualDepartmentDTO = departmentService.getDepartmentById(1);
+        DepartmentDTO actualDepartmentDTO = departmentService.getDepartmentById(id);
 
         // THEN
         Assertions.assertEquals(departmentDTO.getId(), actualDepartmentDTO.getId());
@@ -169,7 +169,7 @@ class DepartmentServiceTest {
 
     @Test
     void updateDepartment_valid_success() {
-//        // GIVEN
+//      // GIVEN
         Mockito.when(departmentRepository.findById(any())).thenReturn(Optional.of(department3));
         Mockito.doAnswer(invocationOnMock -> {
             Department department = invocationOnMock.getArgument(0);
@@ -193,9 +193,24 @@ class DepartmentServiceTest {
     @Test
     void updateDepartment_notFound_fail() {
         // GIVEN
+        Mockito.when(departmentRepository.findById(any())).thenReturn(Optional.ofNullable(null));
+
+        // WHEN
+        var exception = Assertions.assertThrows(AppException.class, ()
+                -> departmentService.updateDepartment(departmentDTO3_update, department3.getId()));
+        Assertions.assertEquals(exception.getErrorCode().getCode(), ErrorCode.DEPARTMENT_NOT_FOUND.getCode());
     }
 
     @Test
     void deleteDepartmentById() {
+        // GIVEN
+        Integer id = 1;
+
+        // WHEN
+        departmentService.deleteDepartmentById(id);
+
+        // THEN
+        Mockito.verify(departmentRepository, Mockito.times(1)).deleteById(id);
+
     }
 }

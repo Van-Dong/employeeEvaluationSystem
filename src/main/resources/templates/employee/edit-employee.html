@@ -35,7 +35,7 @@
     <!-- Date of Birth -->
     <div class="form-group">
       <label for="dob" th:text="#{employee.dob}">Date of Birth:</label>
-      <input class="form-control" type="date" id="dob" th:field="*{dob}" th:value="*{dob}"/>
+      <input class="form-control" type="date" id="dob" name="dob" th:value="${employeeDTO.getFormattedDob()}"/>
       <div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}" class="text-danger"></div>
     </div>
 
@@ -79,7 +79,7 @@
     <!-- Note -->
     <div class="form-group">
       <label for="note" th:text="#{employee.note}">Note:</label> <br/>
-      <textarea id="note" th:field="*{note}"></textarea>
+      <textarea id="note" th:field="*{note}" class="w-100" style="min-height: 100px;"></textarea>
       <div th:if="${#fields.hasErrors('note')}" th:errors="*{note}" class="text-danger"></div>
     </div>
 
