@@ -51,19 +51,15 @@ public class EmployeeService {
 
         // Store image file
         if (!(employeeDTO.getImageFile() == null || employeeDTO.getImageFile().isEmpty())) {
-            try {
-                String imageUrl = fileStorageService.storeFile(employeeDTO.getImageFile());
-                employee.setImageUrl(imageUrl);
-            } catch (IOException e) {
-                throw new AppException(ErrorCode.ERROR_WHEN_STORE_IMAGE);
-            }
+            String imageUrl = fileStorageService.storeFile(employeeDTO.getImageFile());
+            employee.setImageUrl(imageUrl);
         }
 
         // Set department
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-                    .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
-            employee.setDepartment(department);
+                .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
+                employee.setDepartment(department);
         }
 
         employeeRepository.save(employee);
@@ -74,24 +70,20 @@ public class EmployeeService {
                 .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         employeeMapper.updatedEmployee(employee, employeeDTO);
 
+        // Store image file
+        if (!(employeeDTO.getImageFile() == null || employeeDTO.getImageFile().isEmpty())) {
+            String imageUrl = fileStorageService.storeFile(employeeDTO.getImageFile());
+            if (employee.getImageUrl() != null) {
+                fileStorageService.deleteFile(employee.getImageUrl());
+            }
+            employee.setImageUrl(imageUrl);
+        }
+
         // Set department
         if (employeeDTO.getDepartmentId() != null) {
             Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-                    .orElseThrow(() -> new AppException(ErrorCode.ERROR_WHEN_STORE_IMAGE));
+                    .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
             employee.setDepartment(department);
-        }
-
-        // Store image file
-        if (!(employeeDTO.getImageFile() == null || employeeDTO.getImageFile().isEmpty())) {
-            try {
-                String imageUrl = fileStorageService.storeFile(employeeDTO.getImageFile());
-                if (employee.getImageUrl() != null) {
-                    fileStorageService.deleteFile(employee.getImageUrl());
-                }
-                employee.setImageUrl(imageUrl);
-            } catch (IOException e) {
-                throw new AppException(ErrorCode.ERROR_WHEN_STORE_IMAGE);
-            }
         }
 
         employeeRepository.save(employee);
