@@ -1,25 +1,27 @@
 package com.dongnv.employee_evaluation_system.service;
 
-import com.dongnv.employee_evaluation_system.exception.AppException;
-import com.dongnv.employee_evaluation_system.exception.ErrorCode;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.dongnv.employee_evaluation_system.exception.AppException;
+import com.dongnv.employee_evaluation_system.exception.ErrorCode;
 
 @Service
-//@Slf4j
+// @Slf4j
 public class FileStorageService {
-    private final String uploadDir = "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/";
-    private final String uploadImageDir = "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/images/";
-//    private final String uploadDir = "C:/Users/HELLO/Documents/Assignment/Day-2/employeeEvaluationSystem/upload_images/";
-//private final String uploadImageDir = "C:/Users/HELLO/Documents/Assignment/Day-2/employeeEvaluationSystem/upload_images/images/";
+    private final String uploadDir;
+    private final String uploadImageDir;
+
+    public FileStorageService(@Value("${file.upload-dir}") String uploadDir,
+                              @Value("${file.upload-image-dir}") String uploadImageDir) {
+        this.uploadDir = uploadDir;
+        this.uploadImageDir = uploadImageDir;
+    }
 
     public String storeFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -47,11 +49,10 @@ public class FileStorageService {
             Path filePath = Paths.get(uploadDir + fileName);
             try {
                 Files.deleteIfExists(filePath);
-//                log.info("File {} was deleted!", fileName);
+                System.out.println("Deleted file: " + filePath);
             } catch (IOException e) {
-//                log.info("File could not be deleted");
+                System.out.print("Error while deleting file");
             }
-
         }
     }
 }

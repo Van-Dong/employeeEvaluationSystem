@@ -1,18 +1,18 @@
 package com.dongnv.employee_evaluation_system.dto.request;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
     Long id;
 
@@ -24,7 +24,7 @@ public class UserCreationRequest {
     @Size(min = 5, message = "Password must be at least 5 character")
     String password;
 
-//    Boolean isActive;
+    //    Boolean isActive;
 
     LocalDate createdDate;
 }

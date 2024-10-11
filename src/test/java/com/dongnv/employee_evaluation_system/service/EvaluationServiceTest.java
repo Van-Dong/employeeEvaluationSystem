@@ -1,5 +1,16 @@
 package com.dongnv.employee_evaluation_system.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 import com.dongnv.employee_evaluation_system.dto.mapper.EvaluationMapper;
 import com.dongnv.employee_evaluation_system.dto.mapper.EvaluationMapperImpl;
 import com.dongnv.employee_evaluation_system.dto.request.EvaluationDTO;
@@ -9,18 +20,6 @@ import com.dongnv.employee_evaluation_system.model.Employee;
 import com.dongnv.employee_evaluation_system.model.Evaluation;
 import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
 import com.dongnv.employee_evaluation_system.repository.EvaluationRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
-import javax.swing.text.html.Option;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 // Use Mock and Spy
 class EvaluationServiceTest {
@@ -66,22 +65,18 @@ class EvaluationServiceTest {
         evaluationService.getEvaluationByEmployeeId(employeeId, page);
 
         // THEN
-        Mockito.verify(evaluationRepository, Mockito.times(1)).findByEmployeeId(employeeId,
-                PageRequest.of(page, 10, Sort.by(Sort.Order.desc("evaluationDate"))));
+        Mockito.verify(evaluationRepository, Mockito.times(1))
+                .findByEmployeeId(employeeId, PageRequest.of(page, 10, Sort.by(Sort.Order.desc("evaluationDate"))));
     }
 
     @Test
     void createEvaluation_valid_success() {
         // GIVEN
         long employeeId = 0;
-        EvaluationDTO evaluationDTO = EvaluationDTO.builder()
-                .isCommended(true)
-                .reason("OT")
-                .build();
-        Employee employee = Employee.builder()
-                .id(employeeId)
-                .fullName("Nguyen Van A")
-                .build();
+        EvaluationDTO evaluationDTO =
+                EvaluationDTO.builder().isCommended(true).reason("OT").build();
+        Employee employee =
+                Employee.builder().id(employeeId).fullName("Nguyen Van A").build();
         Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
         // WHEN
@@ -99,32 +94,23 @@ class EvaluationServiceTest {
     void createEvaluation_employeeNotExist_fail() {
         // GIVEN
         long employeeId = 0;
-        EvaluationDTO evaluationDTO = EvaluationDTO.builder()
-                .isCommended(true)
-                .reason("OT")
-                .build();
+        EvaluationDTO evaluationDTO =
+                EvaluationDTO.builder().isCommended(true).reason("OT").build();
         Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.ofNullable(null));
 
         // WHEN, THEN
-        var exception = Assertions.assertThrows(AppException.class, () ->
-                evaluationService.createEvaluation(employeeId, evaluationDTO));
+        var exception = Assertions.assertThrows(
+                AppException.class, () -> evaluationService.createEvaluation(employeeId, evaluationDTO));
         Assertions.assertEquals(ErrorCode.EMPLOYEE_NOT_FOUND, exception.getErrorCode());
-
     }
-
 
     @Test
     void updateEvaluation_valid_success() {
         // GIVEN
         long evaluationId = 1;
-        EvaluationDTO evaluationDTO = EvaluationDTO.builder()
-                .isCommended(false)
-                .reason("OT")
-                .build();
-        Evaluation evaluation = Evaluation.builder()
-                .id(1L)
-                .isCommended(false)
-                .build();
+        EvaluationDTO evaluationDTO =
+                EvaluationDTO.builder().isCommended(false).reason("OT").build();
+        Evaluation evaluation = Evaluation.builder().id(1L).isCommended(false).build();
         Mockito.when(evaluationRepository.findById(evaluationId)).thenReturn(Optional.of(evaluation));
 
         // WHEN
@@ -142,14 +128,13 @@ class EvaluationServiceTest {
     void updateEvaluation_employeeNotExist_fail() {
         // GIVEN
         long evaluationId = 1;
-        EvaluationDTO evaluationDTO = EvaluationDTO.builder()
-                .isCommended(false)
-                .reason("OT")
-                .build();
+        EvaluationDTO evaluationDTO =
+                EvaluationDTO.builder().isCommended(false).reason("OT").build();
         Mockito.when(evaluationRepository.findById(evaluationId)).thenReturn(Optional.ofNullable(null));
 
         // WHEN, THEN
-        var exception = Assertions.assertThrows(AppException.class, () -> evaluationService.updateEvaluation(evaluationId, evaluationDTO));
+        var exception = Assertions.assertThrows(
+                AppException.class, () -> evaluationService.updateEvaluation(evaluationId, evaluationDTO));
         Assertions.assertEquals(ErrorCode.EVALUATION_NOT_FOUND, exception.getErrorCode());
     }
 

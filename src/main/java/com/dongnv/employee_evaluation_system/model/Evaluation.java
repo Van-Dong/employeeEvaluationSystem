@@ -1,12 +1,13 @@
 package com.dongnv.employee_evaluation_system.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -19,6 +20,7 @@ public class Evaluation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     Boolean isCommended;
     String reason;
 

@@ -1,6 +1,5 @@
 package com.dongnv.employee_evaluation_system.dto.response;
 
-import com.dongnv.employee_evaluation_system.model.Employee;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,5 +14,4 @@ public class DepartmentScore {
     String name;
     Long totalRewards;
     Long totalDisciplines;
-
 }

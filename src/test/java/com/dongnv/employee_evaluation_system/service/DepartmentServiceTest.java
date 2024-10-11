@@ -1,13 +1,11 @@
 package com.dongnv.employee_evaluation_system.service;
 
-import com.dongnv.employee_evaluation_system.dto.mapper.DepartmentMapper;
-import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
-import com.dongnv.employee_evaluation_system.exception.AppException;
-import com.dongnv.employee_evaluation_system.exception.ErrorCode;
-import com.dongnv.employee_evaluation_system.model.Department;
-import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
-import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
-import org.junit.jupiter.api.AfterEach;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import com.dongnv.employee_evaluation_system.dto.mapper.DepartmentMapper;
+import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
+import com.dongnv.employee_evaluation_system.exception.AppException;
+import com.dongnv.employee_evaluation_system.exception.ErrorCode;
+import com.dongnv.employee_evaluation_system.model.Department;
+import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
+import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
 
 // Only Use Mock
 class DepartmentServiceTest {
@@ -48,31 +48,17 @@ class DepartmentServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        department1 = Department.builder()
-                .id(1)
-                .code("D001")
-                .name("Department 1")
-                .build();
-        department2 = Department.builder()
-                .id(2)
-                .code("D002")
-                .name("Department 2")
-                .build();
-        department3 = Department.builder()
-                .id(3)
-                .code("D003")
-                .name("Department 3")
-                .build();
+        department1 =
+                Department.builder().id(1).code("D001").name("Department 1").build();
+        department2 =
+                Department.builder().id(2).code("D002").name("Department 2").build();
+        department3 =
+                Department.builder().id(3).code("D003").name("Department 3").build();
 
-        departmentDTO3 = DepartmentDTO.builder()
-                .code("D003")
-                .name("Department 3")
-                .build();
-        departmentDTO3_update = DepartmentDTO.builder()
-                .code("D003")
-                .name("Department 3333")
-                .build();
-
+        departmentDTO3 =
+                DepartmentDTO.builder().code("D003").name("Department 3").build();
+        departmentDTO3_update =
+                DepartmentDTO.builder().code("D003").name("Department 3333").build();
     }
 
     @Test
@@ -96,7 +82,8 @@ class DepartmentServiceTest {
         department2.setCountEmployee(10);
         List<Department> departments = List.of(department1, department2);
         Page<Department> departmentPage = new PageImpl<>(departments, PageRequest.of(0, 10), departments.size());
-        Mockito.when(departmentRepository.findAllByNameLike(anyString(), any(PageRequest.class))).thenReturn(departmentPage);
+        Mockito.when(departmentRepository.findAllByNameLike(anyString(), any(PageRequest.class)))
+                .thenReturn(departmentPage);
         Mockito.when(employeeRepository.countByDepartmentId(any())).thenReturn(10);
 
         // When
@@ -139,11 +126,13 @@ class DepartmentServiceTest {
         Assertions.assertEquals(Exception.getErrorCode().getCode(), 1001);
     }
 
-
     @Test
     void createDepartment_valid_success() {
         // GIVEN
-        Department department = Department.builder().code(departmentDTO3.getCode()).name(departmentDTO3.getName()).build();
+        Department department = Department.builder()
+                .code(departmentDTO3.getCode())
+                .name(departmentDTO3.getName())
+                .build();
         Mockito.when(departmentMapper.toDepartment(departmentDTO3)).thenReturn(department);
         Mockito.when(departmentRepository.save(department)).thenReturn(department3);
 
@@ -153,31 +142,38 @@ class DepartmentServiceTest {
         // THEN
         Mockito.verify(departmentRepository, Mockito.times(1)).save(any(Department.class));
         Mockito.verify(departmentMapper, Mockito.times(1)).toDepartment(departmentDTO3);
-
     }
 
     @Test
     void createDepartment_nameExist_fail() {
         // GIVEN
-        Department department = Department.builder().code(departmentDTO3.getCode()).name(departmentDTO3.getName()).build();
+        Department department = Department.builder()
+                .code(departmentDTO3.getCode())
+                .name(departmentDTO3.getName())
+                .build();
         Mockito.when(departmentMapper.toDepartment(departmentDTO3)).thenReturn(department);
-        Mockito.doThrow(new DataIntegrityViolationException("Duplicate name department")).when(departmentRepository).save(department);
+        Mockito.doThrow(new DataIntegrityViolationException("Duplicate name department"))
+                .when(departmentRepository)
+                .save(department);
 
         // WHEN, THEN
-        Assertions.assertThrows(DataIntegrityViolationException.class, () -> departmentService.createDepartment(departmentDTO3));
+        Assertions.assertThrows(
+                DataIntegrityViolationException.class, () -> departmentService.createDepartment(departmentDTO3));
     }
 
     @Test
     void updateDepartment_valid_success() {
-//      // GIVEN
+        //      // GIVEN
         Mockito.when(departmentRepository.findById(any())).thenReturn(Optional.of(department3));
         Mockito.doAnswer(invocationOnMock -> {
-            Department department = invocationOnMock.getArgument(0);
-            DepartmentDTO departmentDTO  = invocationOnMock.getArgument(1);
-            department.setCode(departmentDTO.getCode());
-            department.setName(departmentDTO.getName());
-            return null;
-        }).when(departmentMapper).updatedDepartment(department3, departmentDTO3_update);
+                    Department department = invocationOnMock.getArgument(0);
+                    DepartmentDTO departmentDTO = invocationOnMock.getArgument(1);
+                    department.setCode(departmentDTO.getCode());
+                    department.setName(departmentDTO.getName());
+                    return null;
+                })
+                .when(departmentMapper)
+                .updatedDepartment(department3, departmentDTO3_update);
 
         Mockito.when(departmentRepository.save(any(Department.class))).thenReturn(department3);
 
@@ -196,8 +192,9 @@ class DepartmentServiceTest {
         Mockito.when(departmentRepository.findById(any())).thenReturn(Optional.ofNullable(null));
 
         // WHEN
-        var exception = Assertions.assertThrows(AppException.class, ()
-                -> departmentService.updateDepartment(departmentDTO3_update, department3.getId()));
+        var exception = Assertions.assertThrows(
+                AppException.class,
+                () -> departmentService.updateDepartment(departmentDTO3_update, department3.getId()));
         Assertions.assertEquals(exception.getErrorCode().getCode(), ErrorCode.DEPARTMENT_NOT_FOUND.getCode());
     }
 
@@ -211,6 +208,5 @@ class DepartmentServiceTest {
 
         // THEN
         Mockito.verify(departmentRepository, Mockito.times(1)).deleteById(id);
-
     }
 }

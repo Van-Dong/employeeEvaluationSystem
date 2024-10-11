@@ -1,8 +1,9 @@
 package com.dongnv.employee_evaluation_system.validation.validator;
 
-import com.dongnv.employee_evaluation_system.validation.annotation.RoleConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import com.dongnv.employee_evaluation_system.validation.annotation.RoleConstraint;
 
 public class RoleValidator implements ConstraintValidator<RoleConstraint, String> {
     private String[] roles;

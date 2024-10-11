@@ -1,10 +1,12 @@
 package com.dongnv.employee_evaluation_system.exception.handler;
 
-import com.dongnv.employee_evaluation_system.exception.AppException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.dongnv.employee_evaluation_system.exception.AppException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j

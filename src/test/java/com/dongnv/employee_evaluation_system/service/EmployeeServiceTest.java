@@ -1,16 +1,10 @@
 package com.dongnv.employee_evaluation_system.service;
 
-import com.dongnv.employee_evaluation_system.dto.mapper.EmployeeMapper;
-import com.dongnv.employee_evaluation_system.dto.mapper.EmployeeMapperImpl;
-import com.dongnv.employee_evaluation_system.dto.mapper.EvaluationMapperImpl;
-import com.dongnv.employee_evaluation_system.dto.request.DepartmentDTO;
-import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
-import com.dongnv.employee_evaluation_system.exception.AppException;
-import com.dongnv.employee_evaluation_system.exception.ErrorCode;
-import com.dongnv.employee_evaluation_system.model.Department;
-import com.dongnv.employee_evaluation_system.model.Employee;
-import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
-import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,11 +12,15 @@ import org.mockito.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import com.dongnv.employee_evaluation_system.dto.mapper.EmployeeMapper;
+import com.dongnv.employee_evaluation_system.dto.mapper.EmployeeMapperImpl;
+import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
+import com.dongnv.employee_evaluation_system.exception.AppException;
+import com.dongnv.employee_evaluation_system.exception.ErrorCode;
+import com.dongnv.employee_evaluation_system.model.Department;
+import com.dongnv.employee_evaluation_system.model.Employee;
+import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
+import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
 
 class EmployeeServiceTest {
     @Mock
@@ -70,19 +68,15 @@ class EmployeeServiceTest {
         employeeService.getEmployeesByDepartmentId(departmentId, page);
 
         // THEN
-        Mockito.verify(employeeRepository, Mockito.times(1))
-                .findByDepartmentId(departmentId, PageRequest.of(page, 10));
+        Mockito.verify(employeeRepository, Mockito.times(1)).findByDepartmentId(departmentId, PageRequest.of(page, 10));
     }
 
     @Test
     void getEmployeeById_hasDepartment_success() {
         // GIVEN
         long employeeId = 1;
-        Department department = Department.builder()
-                .id(1)
-                .code("HR001")
-                .name("Human Resource")
-                .build();
+        Department department =
+                Department.builder().id(1).code("HR001").name("Human Resource").build();
         Employee employee = Employee.builder()
                 .id(employeeId)
                 .fullName("Nguyen Van A")
@@ -103,10 +97,8 @@ class EmployeeServiceTest {
     void getEmployeeById_notHasDepartment_success() {
         // GIVEN
         long employeeId = 1;
-        Employee employee = Employee.builder()
-                .id(employeeId)
-                .fullName("Nguyen Van A")
-                .build();
+        Employee employee =
+                Employee.builder().id(employeeId).fullName("Nguyen Van A").build();
         Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
         // WHEN
@@ -129,27 +121,19 @@ class EmployeeServiceTest {
         Assertions.assertEquals(ErrorCode.EMPLOYEE_NOT_FOUND, exception.getErrorCode());
     }
 
-
     @Test
     void save_hasFile_hasDepartmentId_success() {
         // GIVEN
-        MockMultipartFile mockFile = new MockMultipartFile(
-                "file",
-                "image1.jpg",
-                "image/jpeg",
-                "Image content".getBytes()
-        );
+        MockMultipartFile mockFile =
+                new MockMultipartFile("file", "image1.jpg", "image/jpeg", "Image content".getBytes());
         EmployeeDTO employeeDTO = EmployeeDTO.builder()
                 .fullName("Nguyen Van A")
                 .isMale(true)
                 .departmentId(1)
                 .imageFile(mockFile)
                 .build();
-        Department department = Department.builder()
-                .id(1)
-                .code("HR001")
-                .name("Human Resource")
-                .build();
+        Department department =
+                Department.builder().id(1).code("HR001").name("Human Resource").build();
         Mockito.when(fileStorageService.storeFile(employeeDTO.getImageFile())).thenReturn("images/image1.jpg");
         Mockito.when(departmentRepository.findById(department.getId())).thenReturn(Optional.of(department));
 
@@ -162,8 +146,8 @@ class EmployeeServiceTest {
         Employee savedEmployee = employeeCaptor.getValue();
         Assertions.assertEquals(employeeDTO.getId(), savedEmployee.getId());
         Assertions.assertEquals(employeeDTO.getFullName(), savedEmployee.getFullName());
-        Assertions.assertEquals(employeeDTO.getDepartmentId(), savedEmployee.getDepartment().getId());
-
+        Assertions.assertEquals(
+                employeeDTO.getDepartmentId(), savedEmployee.getDepartment().getId());
     }
 
     @Test
@@ -184,10 +168,8 @@ class EmployeeServiceTest {
     @Test
     void save_noFile_noDepartmentId_success() {
         // GIVEN
-        EmployeeDTO employeeDTO = EmployeeDTO.builder()
-                .fullName("Nguyen Van A")
-                .isMale(true)
-                .build();
+        EmployeeDTO employeeDTO =
+                EmployeeDTO.builder().fullName("Nguyen Van A").isMale(true).build();
 
         // WHEN
         employeeService.save(employeeDTO);
@@ -205,23 +187,16 @@ class EmployeeServiceTest {
     void updateEmployee_hasFile_hasImageUrl_hasDepartmentId_success() {
         // GIVEN
         long employeeId = 1;
-        MockMultipartFile mockFile = new MockMultipartFile(
-                "file",
-                "anh2.jpg",
-                "image/jpeg",
-                "Image content".getBytes()
-        );
+        MockMultipartFile mockFile =
+                new MockMultipartFile("file", "anh2.jpg", "image/jpeg", "Image content".getBytes());
         EmployeeDTO employeeDTO = EmployeeDTO.builder()
                 .fullName("Nguyen Van A1")
                 .isMale(true)
                 .imageFile(mockFile)
                 .departmentId(1)
                 .build();
-        Department department = Department.builder()
-                .id(1)
-                .code("HR001")
-                .name("Human Resource")
-                .build();
+        Department department =
+                Department.builder().id(1).code("HR001").name("Human Resource").build();
         Employee employee = Employee.builder()
                 .id(employeeId)
                 .fullName("Nguyen Van A")
@@ -242,7 +217,8 @@ class EmployeeServiceTest {
         Mockito.verify(employeeRepository, Mockito.times(1)).save(employeeCaptor.capture());
         Employee savedEmployee = employeeCaptor.getValue();
         Assertions.assertEquals(employeeDTO.getFullName(), savedEmployee.getFullName());
-        Assertions.assertEquals(employeeDTO.getDepartmentId(), savedEmployee.getDepartment().getId());
+        Assertions.assertEquals(
+                employeeDTO.getDepartmentId(), savedEmployee.getDepartment().getId());
         Assertions.assertEquals("images/anh2.jpg", savedEmployee.getImageUrl());
     }
 
@@ -258,8 +234,8 @@ class EmployeeServiceTest {
         Mockito.when(employeeRepository.findById(employeeId)).thenReturn(Optional.ofNullable(null));
 
         // WHEN, THEN
-        var exception = Assertions.assertThrows(AppException.class, () ->
-                employeeService.updateEmployee(employeeDTO, employeeId));
+        var exception = Assertions.assertThrows(
+                AppException.class, () -> employeeService.updateEmployee(employeeDTO, employeeId));
         Assertions.assertEquals(ErrorCode.EMPLOYEE_NOT_FOUND, exception.getErrorCode());
     }
 
@@ -283,8 +259,8 @@ class EmployeeServiceTest {
                 .thenReturn(Optional.ofNullable(null));
 
         // WHEN, THEN
-        var exception = Assertions.assertThrows(AppException.class, () ->
-                employeeService.updateEmployee(employeeDTO, employeeId));
+        var exception = Assertions.assertThrows(
+                AppException.class, () -> employeeService.updateEmployee(employeeDTO, employeeId));
         Assertions.assertEquals(ErrorCode.DEPARTMENT_NOT_FOUND, exception.getErrorCode());
     }
 

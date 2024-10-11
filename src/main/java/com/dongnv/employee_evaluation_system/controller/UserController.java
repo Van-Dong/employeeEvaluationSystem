@@ -1,15 +1,7 @@
 package com.dongnv.employee_evaluation_system.controller;
 
-import com.dongnv.employee_evaluation_system.dto.request.SetPasswordRequest;
-import com.dongnv.employee_evaluation_system.dto.request.SetRoleRequest;
-import com.dongnv.employee_evaluation_system.dto.request.UserCreationRequest;
-import com.dongnv.employee_evaluation_system.dto.response.UserResponse;
-import com.dongnv.employee_evaluation_system.service.UserService;
-import jakarta.validation.Valid; 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +13,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dongnv.employee_evaluation_system.dto.request.SetPasswordRequest;
+import com.dongnv.employee_evaluation_system.dto.request.SetRoleRequest;
+import com.dongnv.employee_evaluation_system.dto.request.UserCreationRequest;
+import com.dongnv.employee_evaluation_system.dto.response.UserResponse;
+import com.dongnv.employee_evaluation_system.service.UserService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -30,18 +33,14 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    String getUsers(@RequestParam(defaultValue = "0") Integer page,
-                    @RequestParam(defaultValue = "") String searchUsername, Model model) {
+    String getUsers(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "") String searchUsername,
+            Model model) {
         Page<UserResponse> userPage = userService.getUserByPage(searchUsername, page);
         model.addAttribute("userPage", userPage);
         return "user/index";
     }
-
-//    @GetMapping("/register")
-//    String register(Model model) {
-//        model.addAttribute("userCreationRequest", new UserCreationRequest());
-//        return "user/register";
-//    }
 
     @GetMapping("/login")
     String login() {
@@ -52,34 +51,41 @@ public class UserController {
         return "user/login";
     }
 
-    @PostMapping("/register")
-    String register(@Valid UserCreationRequest userCreationRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        log.info("REGISTER TO CREATE USER");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-            return "redirect:/";
-        }
-        if (bindingResult.hasErrors()) {
-            return "user/register";
-        }
-
-        try {
-            userService.createUser(userCreationRequest);
-        } catch (DataIntegrityViolationException e) {
-            bindingResult.rejectValue("username", "error.user.duplicate", "Username already exists");
-            return "user/register";
-        }
-        redirectAttributes.addFlashAttribute("message", "Register successfully!");
-        return "redirect:/user/login";
-    }
+//    @PostMapping("/register")
+//    String register(
+//            @Valid UserCreationRequest userCreationRequest,
+//            BindingResult bindingResult,
+//            RedirectAttributes redirectAttributes) {
+//        log.info("REGISTER TO CREATE USER");
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+//            return "redirect:/";
+//        }
+//        if (bindingResult.hasErrors()) {
+//            return "user/register";
+//        }
+//
+//        try {
+//            userService.createUser(userCreationRequest);
+//        } catch (DataIntegrityViolationException e) {
+//            bindingResult.rejectValue("username", "error.user.duplicate", "Username already exists");
+//            return "user/register";
+//        }
+//        redirectAttributes.addFlashAttribute("message", "Register successfully!");
+//        return "redirect:/user/login";
+//    }
 
     @PostMapping("/create")
     @ResponseBody
     ResponseEntity<String> create(@Valid UserCreationRequest userCreationRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            // Add error to bindingResult
             StringBuilder error = new StringBuilder();
-            if (bindingResult.hasFieldErrors("username")) error.append(bindingResult.getFieldError("username").getDefaultMessage()).append("\n");
-            if (bindingResult.hasFieldErrors("password")) error.append(bindingResult.getFieldError("password").getDefaultMessage());
+            if (bindingResult.hasFieldErrors("username"))
+                error.append(bindingResult.getFieldError("username").getDefaultMessage())
+                        .append("\n");
+            if (bindingResult.hasFieldErrors("password"))
+                error.append(bindingResult.getFieldError("password").getDefaultMessage());
             return ResponseEntity.badRequest().body(error.toString());
         }
         try {
@@ -92,9 +98,8 @@ public class UserController {
 
     @PostMapping("/set-password/{id}")
     @ResponseBody
-    ResponseEntity<String> setPassword(@PathVariable Long id,
-                                     @Valid SetPasswordRequest request,
-                                     BindingResult bindingResult) {
+    ResponseEntity<String> setPassword(
+            @PathVariable Long id, @Valid SetPasswordRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError("new_password").getDefaultMessage();
             return ResponseEntity.badRequest().body(errorMessage);
@@ -106,9 +111,7 @@ public class UserController {
 
     @PostMapping("/set-role/{id}")
     @ResponseBody
-    ResponseEntity<String> setRole(@PathVariable Long id,
-                                       @Valid SetRoleRequest request,
-                                       BindingResult bindingResult) {
+    ResponseEntity<String> setRole(@PathVariable Long id, @Valid SetRoleRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldError("role").getDefaultMessage();
             return ResponseEntity.badRequest().body(errorMessage);
@@ -123,5 +126,4 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
-
 }

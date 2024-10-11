@@ -1,7 +1,7 @@
 package com.dongnv.employee_evaluation_system.dto.response;
 
-import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
 import com.dongnv.employee_evaluation_system.model.Employee;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

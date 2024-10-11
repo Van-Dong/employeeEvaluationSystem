@@ -1,21 +1,22 @@
 package com.dongnv.employee_evaluation_system.dto.request;
 
-import com.dongnv.employee_evaluation_system.validation.annotation.DobConstraint;
-import com.dongnv.employee_evaluation_system.validation.annotation.FileConstraint;
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import jakarta.validation.constraints.*;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.dongnv.employee_evaluation_system.validation.annotation.DobConstraint;
+import com.dongnv.employee_evaluation_system.validation.annotation.FileConstraint;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmployeeDTO {
     Long id;
 
@@ -41,9 +42,12 @@ public class EmployeeDTO {
 
     @Email(message = "Invalid email")
     String email;
+
     String phone;
+
     @Size(max = 255, message = "Note must be max 255 characters")
     String note;
+
     Integer departmentId;
     String imageUrl;
 

@@ -1,5 +1,9 @@
 package com.dongnv.employee_evaluation_system.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import com.dongnv.employee_evaluation_system.dto.mapper.EmployeeMapper;
 import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
 import com.dongnv.employee_evaluation_system.exception.AppException;
@@ -8,16 +12,10 @@ import com.dongnv.employee_evaluation_system.model.Department;
 import com.dongnv.employee_evaluation_system.model.Employee;
 import com.dongnv.employee_evaluation_system.repository.DepartmentRepository;
 import com.dongnv.employee_evaluation_system.repository.EmployeeRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -37,7 +35,8 @@ public class EmployeeService {
     }
 
     public EmployeeDTO getEmployeeById(Long id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        Employee employee =
+                employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         EmployeeDTO employeeDTO = employeeMapper.toEmployeeDTO(employee);
 
         if (employee.getDepartment() != null) {
@@ -57,17 +56,18 @@ public class EmployeeService {
 
         // Set department
         if (employeeDTO.getDepartmentId() != null) {
-            Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
-                .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
-                employee.setDepartment(department);
+            Department department = departmentRepository
+                    .findById(employeeDTO.getDepartmentId())
+                    .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
+            employee.setDepartment(department);
         }
 
         employeeRepository.save(employee);
     }
 
     public void updateEmployee(EmployeeDTO employeeDTO, Long id) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
+        Employee employee =
+                employeeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_FOUND));
         employeeMapper.updatedEmployee(employee, employeeDTO);
 
         // Store image file
@@ -81,13 +81,15 @@ public class EmployeeService {
 
         // Set department
         if (employeeDTO.getDepartmentId() != null) {
-            Department department = departmentRepository.findById(employeeDTO.getDepartmentId())
+            Department department = departmentRepository
+                    .findById(employeeDTO.getDepartmentId())
                     .orElseThrow(() -> new AppException(ErrorCode.DEPARTMENT_NOT_FOUND));
             employee.setDepartment(department);
         }
 
         employeeRepository.save(employee);
-    };
+    }
+    ;
 
     public void deleteById(Long id) {
         employeeRepository.deleteById(id);

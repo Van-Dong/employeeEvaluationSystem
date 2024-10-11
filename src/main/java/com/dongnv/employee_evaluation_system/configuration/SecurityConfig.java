@@ -1,9 +1,5 @@
 package com.dongnv.employee_evaluation_system.configuration;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +13,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSecurity
@@ -35,29 +36,41 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/department/**", "/user", "/user/create", "/user/deactivate/*", "/user/activate/*",
-                                "/user/set-role/*", "/user/set-password/*", "/user/delete/*").hasRole("ADMIN")
-                        .requestMatchers("/department", "/employee/**", "/evaluation/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers(HttpMethod.GET, "/employee", "/evaluation", "/").hasAnyRole("ADMIN", "MANAGER", "CUSTOMER")
-                        .requestMatchers(HttpMethod.GET, "/images/*", "/user/login", "/user/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .requestMatchers(
+                                "/department/**",
+                                "/user",
+                                "/user/create",
+                                "/user/deactivate/*",
+                                "/user/activate/*",
+                                "/user/set-role/*",
+                                "/user/set-password/*",
+                                "/user/delete/*")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/department", "/employee/**", "/evaluation/**")
+                        .hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/employee", "/evaluation", "/")
+                        .hasAnyRole("ADMIN", "MANAGER", "CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/images/*", "/user/login", "/user/register")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/register")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/user/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true)
                         .failureHandler((request, response, exception) -> {
-                            if (exception instanceof DisabledException || exception instanceof InternalAuthenticationServiceException) {
+                            if (exception instanceof DisabledException
+                                    || exception instanceof InternalAuthenticationServiceException) {
                                 response.sendRedirect("/user/login?inactive=true");
                             } else {
                                 response.sendRedirect("/user/login?error=true");
                             }
-                        })
-                )
+                        }))
                 .logout(logout -> logout.logoutUrl("/logout").deleteCookies("JSESSIONID"))
-                .exceptionHandling(exception -> exception
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                .exceptionHandling(
+                        exception -> exception.accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.sendRedirect("/error/access-denied");
                         }))
                 .csrf(AbstractHttpConfigurer::disable);

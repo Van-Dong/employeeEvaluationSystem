@@ -25,3 +25,6 @@ spring:
     resources:
 #      static-locations: classpath:/static/, file:////C:/Users/HELLO/Documents/Assignment/Day-2/employeeEvaluationSystem/upload_images
       static-locations: classpath:/static/, file:////C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images
+file:
+  upload-dir: "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/"
+  upload-image-dir: "C:/Users/dongnv/Documents/Assignment/Day-2/employee_evaluation_system/upload_images/images/"

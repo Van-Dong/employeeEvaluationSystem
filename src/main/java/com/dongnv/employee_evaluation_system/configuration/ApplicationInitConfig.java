@@ -1,16 +1,15 @@
 package com.dongnv.employee_evaluation_system.configuration;
 
-import com.dongnv.employee_evaluation_system.constant.UserRole;
-import com.dongnv.employee_evaluation_system.model.User;
-import com.dongnv.employee_evaluation_system.repository.UserRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.dongnv.employee_evaluation_system.constant.UserRole;
+import com.dongnv.employee_evaluation_system.model.User;
+import com.dongnv.employee_evaluation_system.repository.UserRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j

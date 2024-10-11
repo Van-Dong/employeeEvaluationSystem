@@ -1,17 +1,19 @@
 package com.dongnv.employee_evaluation_system.controller;
 
-import com.dongnv.employee_evaluation_system.dto.response.DepartmentScore;
-import com.dongnv.employee_evaluation_system.dto.response.EmployeeScore;
-import com.dongnv.employee_evaluation_system.service.RankingService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.dongnv.employee_evaluation_system.dto.response.DepartmentScore;
+import com.dongnv.employee_evaluation_system.dto.response.EmployeeScore;
+import com.dongnv.employee_evaluation_system.service.RankingService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -22,14 +24,16 @@ public class HomeController {
 
     @GetMapping
     String getBestEmployee(Model model) {
-        Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore("",0);
+        Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore("", 0);
         model.addAttribute("employeeScorePage", employeeScorePage);
         return "main/home";
     }
 
     @GetMapping("/ranking/employee")
-    String getRankingEmployee(@RequestParam(defaultValue = "0") Integer page,
-                              @RequestParam(defaultValue = "") String searchName, Model model) {
+    String getRankingEmployee(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "") String searchName,
+            Model model) {
         if (page < 0) page = 0;
         Page<EmployeeScore> employeeScorePage = rankingService.getEmployeeScore(searchName, page);
         model.addAttribute("employeeScorePage", employeeScorePage);
@@ -37,8 +41,10 @@ public class HomeController {
     }
 
     @GetMapping("/ranking")
-    String getRankingDepartment(@RequestParam(defaultValue = "0") Integer page,
-                                @RequestParam(defaultValue = "") String searchName, Model model) {
+    String getRankingDepartment(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "") String searchName,
+            Model model) {
         if (page < 0) page = 0;
         Page<DepartmentScore> departmentScorePage = rankingService.getDepartmentScore(searchName, page);
         model.addAttribute("departmentScorePage", departmentScorePage);

@@ -1,20 +1,23 @@
 package com.dongnv.employee_evaluation_system.controller;
 
-import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
-import com.dongnv.employee_evaluation_system.dto.request.EvaluationDTO;
-import com.dongnv.employee_evaluation_system.model.Evaluation;
-import com.dongnv.employee_evaluation_system.service.EmployeeService;
-import com.dongnv.employee_evaluation_system.service.EvaluationService;
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import com.dongnv.employee_evaluation_system.dto.request.EmployeeDTO;
+import com.dongnv.employee_evaluation_system.dto.request.EvaluationDTO;
+import com.dongnv.employee_evaluation_system.model.Evaluation;
+import com.dongnv.employee_evaluation_system.service.EmployeeService;
+import com.dongnv.employee_evaluation_system.service.EvaluationService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -45,10 +48,12 @@ public class EvaluationController {
 
     @PostMapping("/create/{employeeId}")
     @ResponseBody
-    ResponseEntity<String> createEvaluation(@PathVariable Long employeeId, @Valid EvaluationDTO evaluationDTO, BindingResult bindingResult) {
+    ResponseEntity<String> createEvaluation(
+            @PathVariable Long employeeId, @Valid EvaluationDTO evaluationDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder error = new StringBuilder();
-            if (bindingResult.hasFieldErrors("reason")) error.append(bindingResult.getFieldError("reason").getDefaultMessage());
+            if (bindingResult.hasFieldErrors("reason"))
+                error.append(bindingResult.getFieldError("reason").getDefaultMessage());
             return ResponseEntity.badRequest().body(error.toString());
         }
         evaluationService.createEvaluation(employeeId, evaluationDTO);

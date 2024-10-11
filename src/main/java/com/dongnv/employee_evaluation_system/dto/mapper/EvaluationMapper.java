@@ -1,10 +1,11 @@
 package com.dongnv.employee_evaluation_system.dto.mapper;
 
-import com.dongnv.employee_evaluation_system.dto.request.EvaluationDTO;
-import com.dongnv.employee_evaluation_system.model.Evaluation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import com.dongnv.employee_evaluation_system.dto.request.EvaluationDTO;
+import com.dongnv.employee_evaluation_system.model.Evaluation;
 
 @Mapper(componentModel = "spring")
 public interface EvaluationMapper {
