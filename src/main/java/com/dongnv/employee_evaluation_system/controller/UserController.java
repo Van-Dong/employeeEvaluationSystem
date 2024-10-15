@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dongnv.employee_evaluation_system.dto.request.SetPasswordRequest;
 import com.dongnv.employee_evaluation_system.dto.request.SetRoleRequest;
@@ -51,29 +50,29 @@ public class UserController {
         return "user/login";
     }
 
-//    @PostMapping("/register")
-//    String register(
-//            @Valid UserCreationRequest userCreationRequest,
-//            BindingResult bindingResult,
-//            RedirectAttributes redirectAttributes) {
-//        log.info("REGISTER TO CREATE USER");
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-//            return "redirect:/";
-//        }
-//        if (bindingResult.hasErrors()) {
-//            return "user/register";
-//        }
-//
-//        try {
-//            userService.createUser(userCreationRequest);
-//        } catch (DataIntegrityViolationException e) {
-//            bindingResult.rejectValue("username", "error.user.duplicate", "Username already exists");
-//            return "user/register";
-//        }
-//        redirectAttributes.addFlashAttribute("message", "Register successfully!");
-//        return "redirect:/user/login";
-//    }
+    //    @PostMapping("/register")
+    //    String register(
+    //            @Valid UserCreationRequest userCreationRequest,
+    //            BindingResult bindingResult,
+    //            RedirectAttributes redirectAttributes) {
+    //        log.info("REGISTER TO CREATE USER");
+    //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    //        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+    //            return "redirect:/";
+    //        }
+    //        if (bindingResult.hasErrors()) {
+    //            return "user/register";
+    //        }
+    //
+    //        try {
+    //            userService.createUser(userCreationRequest);
+    //        } catch (DataIntegrityViolationException e) {
+    //            bindingResult.rejectValue("username", "error.user.duplicate", "Username already exists");
+    //            return "user/register";
+    //        }
+    //        redirectAttributes.addFlashAttribute("message", "Register successfully!");
+    //        return "redirect:/user/login";
+    //    }
 
     @PostMapping("/create")
     @ResponseBody

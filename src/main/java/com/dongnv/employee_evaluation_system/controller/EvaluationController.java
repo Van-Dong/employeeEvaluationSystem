@@ -46,12 +46,14 @@ public class EvaluationController {
         return "evaluation/index";
     }
 
+    // USE JSON Response
     @PostMapping("/create/{employeeId}")
     @ResponseBody
     ResponseEntity<String> createEvaluation(
             @PathVariable Long employeeId, @Valid EvaluationDTO evaluationDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder error = new StringBuilder();
+            // Take error to response
             if (bindingResult.hasFieldErrors("reason"))
                 error.append(bindingResult.getFieldError("reason").getDefaultMessage());
             return ResponseEntity.badRequest().body(error.toString());

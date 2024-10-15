@@ -50,6 +50,8 @@ public class DepartmentController {
         if (bindingResult.hasErrors()) {
             return "department/add-department";
         }
+
+        // Catch duplicate name or code exception to inform error
         try {
             departmentService.createDepartment(departmentDTO);
         } catch (DataIntegrityViolationException exception) {
@@ -73,7 +75,8 @@ public class DepartmentController {
         if (bindingResult.hasErrors()) {
             return "department/edit-department";
         }
-        //        log.info("DEPARTMENTDTO: " + departmentDTO);
+
+        // Catch duplicate name or code exception to inform error
         try {
             departmentService.updateDepartment(departmentDTO, id);
         } catch (ConstraintViolationException e) {

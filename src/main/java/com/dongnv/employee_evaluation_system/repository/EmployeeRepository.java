@@ -14,9 +14,11 @@ import com.dongnv.employee_evaluation_system.model.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    // Count employee in a department by id
     @Query("SELECT COUNT(e) FROM Employee e WHERE e.department.id = :departmentId")
     Integer countByDepartmentId(@Param("departmentId") Integer departmentId);
 
+    // Get employee from an department by department id
     @Query("SELECT e FROM Employee e WHERE e.department.id = :departmentId")
     Page<Employee> findByDepartmentId(@Param("departmentId") Integer departmentId, Pageable pageable);
 

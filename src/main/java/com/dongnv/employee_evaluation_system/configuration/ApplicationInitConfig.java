@@ -22,6 +22,7 @@ public class ApplicationInitConfig {
         return args -> {
             log.info("APPLICATION IS STARTED");
 
+            // Create default admin account
             if (!userRepository.existsByUsername(adminUsername)) {
                 User user = User.builder()
                         .username(adminUsername)

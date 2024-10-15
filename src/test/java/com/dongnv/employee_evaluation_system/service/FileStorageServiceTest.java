@@ -53,7 +53,7 @@ class FileStorageServiceTest {
 
     @BeforeEach
     void setUpEach() {
-//        MockitoAnnotations.openMocks(this);
+        //        MockitoAnnotations.openMocks(this);
         fileStorageService = new FileStorageService("C:/upload", "C:/upload/images");
         System.setOut(new PrintStream(outContent));
     }

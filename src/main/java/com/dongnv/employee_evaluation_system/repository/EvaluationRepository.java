@@ -12,12 +12,13 @@ import com.dongnv.employee_evaluation_system.model.Evaluation;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 
+    // Count evaluation (commended or discipline) of an employee
     @Query("SELECT COUNT(e) FROM Evaluation e WHERE e.isCommended = :isCommended AND e.employee.id = :employeeId")
     long countEvaluationByEmployeeId(@Param("isCommended") Boolean isCommended, @Param("employeeId") Long employeeId);
 
     Page<Evaluation> findByEmployeeId(Long employeeId, Pageable pageable);
 
-    // Get employee with high score
+    // Get employee score order by high score
     @Query("SELECT new com.dongnv.employee_evaluation_system.dto.response.EmployeeScore(e.employee.id, "
             + "COUNT(CASE WHEN e.isCommended = true THEN 1 ELSE null END), "
             + "COUNT(CASE When e.isCommended = false THEN 1 ELSE null END)) "
@@ -29,7 +30,7 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     Page<EmployeeScore> personalAchievementsByEmployeeName(
             @Param("employeeName") String employeeName, Pageable pageable);
 
-    // Get employee with high score
+    // Get department score order by high score
     @Query("SELECT new com.dongnv.employee_evaluation_system.dto.response.DepartmentScore(d.id, d.code, d.name, "
             + "COUNT(CASE WHEN eval.isCommended = true THEN 1 ELSE null END), "
             + "COUNT(CASE WHEN eval.isCommended = false THEN 1 ELSE null END)) "
